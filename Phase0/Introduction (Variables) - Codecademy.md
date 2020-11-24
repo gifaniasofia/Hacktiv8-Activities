@@ -1,6 +1,3 @@
-# Lesson : Introduction to JavaScript
-
-
 # Lesson : Variables
 
 ### 1. Create a Variable: var
