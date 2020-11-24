@@ -1,5 +1,5 @@
 // MIND MAPPING
-Asumsikan nilai pi adalah (22/7). Masukkan nilai jariJari, dan dalam hal ini saya menentukan nilai jariJari adalah 7. Kemudian, hitung nilai keliling sesuai rumusnya yaitu 2*pi*jariJari.
+Asumsikan nilai pi adalah (22/7). Masukkan nilai jariJari dan saya menentukan nilai jariJari adalah 7. Kemudian, hitung nilai keliling sesuai rumusnya yaitu 2*pi*jariJari.
 
 // ALGORITMA
 1. Deklarasikan variabel bernama pi dengan nilai (22/7)
