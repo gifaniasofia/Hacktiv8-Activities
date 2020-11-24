@@ -5,7 +5,7 @@ Deskripsikan nilai pi adalah 3.14. Masukkan nilai jariJari (saya memasukkan nila
 1. Deklarasikan variabel bernama pi dengan nilai 3.14
 2. Siapkan variabel bernama jariJari dan masukkan sebuah nilai ke dalam variabel jariJari
 3. Siapkan variabel bernama kelilingLingkaran untuk diisikan nanti
-4. Lakukan proses perhitungan perkalian antara 2, variabel pi, dan variabel jariJari. Kemudian update/isikan hasil perhitungan ke dalam variabel kelilingLingkaran
+4. Isikan hasil proses perhitungan perkalian antara 2, variabel pi, dan variabel jariJari, ke dalam variabel kelilingLingkaran
 5. Tampilkan nilai kelilingLingkaran
 
 
