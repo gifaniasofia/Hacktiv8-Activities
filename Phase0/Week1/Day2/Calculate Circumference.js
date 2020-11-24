@@ -1,5 +1,5 @@
 // MIND MAPPING
-Deskripsikan nilai pi adalah 3.14. Masukkan nilai jariJari (saya memasukkan nilai jariJari adalah 7). Kemudian, hitung nilai keliling sesuai rumusnya yaitu 2*pi*jariJari.
+Deskripsikan nilai pi adalah 3.14. Masukkan nilai jariJari (saya memasukkan nilai jariJari adalah 7). Kemudian, hitung nilai keliling lingkaran sesuai rumusnya yaitu 2*pi*jariJari.
 
 // ALGORITMA
 1. Deklarasikan variabel bernama pi dengan nilai 3.14
