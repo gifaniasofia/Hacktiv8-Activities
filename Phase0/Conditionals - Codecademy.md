@@ -4,7 +4,7 @@ We often perform a task based on a condition. For example, if the weather is nic
 
 In programming, we can also perform a task based on a condition using an if statement:
 
-```
+```JavaScript
 if (true) {
   console.log('This message will print!'); 
 }
@@ -28,7 +28,7 @@ Let’s make an if statement.
 Below the sale variable declaration, but before the if statement, reassign sale to false. Run your code and observe what happens, we’ll be changing this behavior in the next exercise.
 
 **Answer**
-```
+```JavaScript
 let sale = true;
 if (sale == true) {
   console.log('Time to buy!')
@@ -45,7 +45,7 @@ In the previous exercise, we used an if statement that checked a condition to de
 
 If we wanted to add some default behavior to the if statement, we can add an else statement to run a block of code when the condition evaluates to false. Take a look at the inclusion of an else statement:
 
-```
+```JavaScript
 if (false) {
   console.log('The code in this block will not run.');
 } else {
@@ -68,7 +68,7 @@ In the example above, the else statement:
 1. Add an else statement to the existing if statement. Inside the code block of the else statement, console.log() the string 'Time to wait for a sale.'
 
 **Answer**
-```
+```JavaScript
 let sale = true;
 
 sale = false;
@@ -91,8 +91,10 @@ Here is a list of some handy comparison operators and their syntax:
 - Greater than or equal to: >=
 - Is equal to: ===
 - Is not equal to: !==
-- Comparison operators compare the value on the left with the value on the right. For instance:
-```
+- Comparison operators compare the value on the left with the value on the right. 
+
+For instance:
+```JavaScript
 10 < 12 // Evaluates to true
 ```
 
@@ -100,7 +102,9 @@ It can be helpful to think of comparison statements as questions. When the answe
 
 We can also use comparison operators on different data types like strings:
 
-```'apples' === 'oranges' // false```
+```JavaScript
+'apples' === 'oranges' // false
+```
 
 In the example above, we’re using the identity operator (===) to check if the string 'apples' is the same as the string 'oranges'. Since the two strings are not the same, the comparison statement evaluates to false.
 
@@ -118,7 +122,7 @@ Let’s practice using these comparison operators!
 After you press run, play around with the condition by tweaking the comparison of hungerLevel by using different operators such as <=,>=,>, and <.
 
 **Answer**
-```
+```JavaScript
 let hungerLevel = 7;
 if (hungerLevel > 7) {
   console.log('Time to eat!');
@@ -136,7 +140,7 @@ Working with conditionals means that we will be using booleans, true or false va
 
 When we use the && operator, we are checking that two things are true:
 
-```
+```JavaScript
 if (stopLight === 'green' && pedestrians === 0) {
   console.log('Go!');
 } else {
@@ -148,7 +152,7 @@ When using the && operator, both conditions must evaluate to true for the entire
 
 If we only care about either condition being true, we can use the || operator:
 
-```
+```JavaScript
 if (day === 'Saturday' || day === 'Sunday') {
   console.log('Enjoy the weekend!');
 } else {
@@ -160,7 +164,7 @@ When using the || operator, only one of the conditions must evaluate to true for
 
 The ! not operator reverses, or negates, the value of a boolean:
 
-```
+```JavaScript
 let excited = true;
 console.log(!excited); // Prints false
  
@@ -182,6 +186,7 @@ If both conditions evaluate to true, then console.log() the string 'time to slee
 After you press “Run”, play around with the || operator and the ! operator! What happens if you negate the value of the entire statement with ! and switch to || instead of &&?
 
 **Answer**
+```JavaScript
 let mood = 'sleepy';
 let tirednessLevel = 6;
 if (mood === 'sleepy' && tirednessLevel > 8) {
@@ -189,6 +194,7 @@ if (mood === 'sleepy' && tirednessLevel > 8) {
 } else {
   console.log('not bed time yet')
 }
+```
 
 # 5. Truthy and Falsy
 Let’s consider how non-boolean data types, like strings or numbers, are evaluated when checked inside a condition.
@@ -196,7 +202,7 @@ Let’s consider how non-boolean data types, like strings or numbers, are evalua
 Sometimes, you’ll want to check if a variable exists and you won’t necessarily want it to equal a specific value — you’ll only check to see if the variable has been assigned a value.
 
 Here’s an example:
-```
+```JavaScript
 let myVariable = 'I Exist!';
  
 if (myVariable) {
@@ -217,7 +223,7 @@ So which values are falsy— or evaluate to false when checked as a condition? T
 - NaN, or Not a Number
 
 Here’s an example with numbers:
-```
+```JavaScript
 let numberOfApples = 0;
  
 if (numberOfApples){
@@ -237,7 +243,7 @@ Instructions
 After you make this change and run your code, 'Great! You've started your work!' should log to the console.
 
 **Answer**
-```
+```JavaScript
 let wordCount = 100;
 
 if (wordCount) {
@@ -260,7 +266,7 @@ if (favoritePhrase) {
 Truthy and falsy evaluations open a world of short-hand possibilities!
 
 Say you have a website and want to take a user’s username to make a personalized greeting. Sometimes, the user does not have an account, making the username variable falsy. The code below checks if username is defined and assigns a default string if it is not:
-```
+```JavaScript
 let defaultName;
 if (username) {
   defaultName = username;
@@ -271,7 +277,7 @@ if (username) {
 
 If you combine your knowledge of logical operators you can use a short-hand for the code above. In a boolean condition, JavaScript assigns the truthy value to a variable if you use the || operator in your assignment:
 
-```
+```JavaScript
 let defaultName = username || 'Stranger';
 ```
 
@@ -287,12 +293,14 @@ Assign to writingUtensil the value of tool and if tool is falsy, assign a defaul
 What if we reassign the value of tool to 'marker'. Let’s see what happens to the value of writingUtensil.
 
 **Answer 1**
+```JavaScript
 let tool = '';
 
 // Use short circuit evaluation to assign  writingUtensil variable below:
 let writingUtensil = tool || 'pen';
 
 console.log(`The ${writingUtensil} is mightier than the sword.`);
+```
 
 **Answer 2**
 ```
@@ -303,11 +311,12 @@ let writingUtensil = tool || 'pen';
 
 console.log(`The ${writingUtensil} is mightier than the sword.`);
 ```
+
 # 7. Ternary Operator
 In the spirit of using short-hand syntax, we can use a ternary operator to simplify an if...else statement.
 
 Take a look at the if...else statement example:
-```
+```JavaScript
 let isNightTime = true;
  
 if (isNightTime) {
@@ -319,7 +328,7 @@ if (isNightTime) {
 
 We can use a ternary operator to perform the same functionality:
 
-```
+```JavaScript
 isNightTime ? console.log('Turn on the lights!') : console.log('Turn off the lights!');
 ```
 
@@ -336,7 +345,7 @@ In the example above:
 3. Refactor the third if...else block to use a ternary operator.
 
 **Answer**
-```
+```JavaScript
 let isLocked = false;
 
 if (isLocked) {
@@ -373,7 +382,7 @@ We can add more conditions to our if...else with an else if statement. The else 
 
 The else if statement always comes after the if statement and before the else statement. The else if statement also takes a condition. Let’s take a look at the syntax:
 
-```
+```JavaScript
 let stopLight = 'yellow';
  
 if (stopLight === 'red') {
@@ -407,7 +416,7 @@ Inside the code block of the else if statement you just created, add a console.l
 Inside the code block of the else if statement you just created, add a console.log() that prints the string 'It\'s sunny and warm because it\'s summer!'.
 
 **Answer**
-```
+```JavaScript
 let season = 'summer';
 
 if (season === 'spring') {
@@ -425,7 +434,7 @@ if (season === 'spring') {
 
 # 9. The switch keyword
 else if statements are a great tool if we need to check multiple conditions. In programming, we often find ourselves needing to check multiple values and handling each of them differently. For example:
-```
+```JavaScript
 let groceryItem = 'papaya';
  
 if (groceryItem === 'tomato') {
@@ -440,7 +449,7 @@ if (groceryItem === 'tomato') {
 In the code above, we have a series of conditions checking for a value that matches a groceryItem variable. Our code works fine, but imagine if we needed to check 100 different values! Having to write that many else if statements sounds like a pain!
 
 A switch statement provides an alternative syntax that is easier to read and write. A switch statement looks like this:
-```
+```JavaScript
 let groceryItem = 'papaya';
  
 switch (groceryItem) {
@@ -473,7 +482,7 @@ switch (groceryItem) {
 athleteFinalPosition is already defined at the top of main.js. So start by writing a switch statement with athleteFinalPosition as its expression.
 
 **Answer**
-```
+```JavaScript
 let athleteFinalPosition = 'first place';
 
 switch (athleteFinalPosition) {
