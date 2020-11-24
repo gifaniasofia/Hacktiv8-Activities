@@ -39,7 +39,7 @@ Let’s break down the example:
 
 **Answer**
 ```JavaScript
-or (let i = 5; i <= 10; i++) {
+for (let i = 5; i <= 10; i++) {
   console.log(i);
 }
 ```
