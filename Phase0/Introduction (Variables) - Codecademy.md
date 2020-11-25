@@ -1,6 +1,6 @@
 # Lesson : Variables
 
-### 1. Create a Variable: var
+## 1. Create a Variable: var
 There were a lot of changes introduced in the ES6 version of JavaScript in 2015. One of the biggest changes was two new keywords, let and const, to create, or declare, variables. Prior to the ES6, programmers could only use the var keyword to declare variables.
 ```JavaScript
 var myName = 'Arya';
@@ -38,7 +38,7 @@ console.log(favoriteFood);
 console.log(numOfSlices);
 ```
 
-### 2. Create a Variable: let
+## 2. Create a Variable: let
 As mentioned in the previous exercise, the let keyword was introduced in ES6. The let keyword signals that the variable can be reassigned a different value. Take a look at the example:
 
 ```JavaScript
@@ -72,7 +72,7 @@ changeMe = false;
 console.log(changeMe);
 ```
 
-### 3. Create a Variable: const
+## 3. Create a Variable: const
 The const keyword was also introduced in ES6, and is short for the word constant. Just like with var and let you can store any value in a const variable. The way you declare a const variable and assign a value to it follows the same structure as let and var. Take a look at the following example:
 
 ```JavaScript
@@ -112,4 +112,4 @@ console.log(entree);
 entree = 'Tacos';
 ```
 
-### 4. Mathematical Assignment Operators
+## 4. Mathematical Assignment Operators
