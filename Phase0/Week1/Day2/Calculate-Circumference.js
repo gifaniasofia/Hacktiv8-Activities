@@ -15,7 +15,7 @@ PSEUDOCODE
 ==========
 STORE pi AS Number WITH 3.14
 STORE jariJari AS Number WITH 7
-STORE kelilingLingkaran AS Number WITH ANY VALUE
+STORE kelilingLingkaran AS Number WITH 0
 
 SET kelilingLingkaran WITH 2 TIMES pi TIMES jariJari
 
