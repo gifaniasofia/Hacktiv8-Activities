@@ -26,7 +26,9 @@ for (var itung = 1; i < 10; i++) {
 ```
 
 **i++ =====> i+=1**
+
 **i-- =====> i-=1**
+
 **selain i += 1 bisa i += 2 dst buat loncat 2*
 
 **PSEUDOCODE**
