@@ -137,12 +137,13 @@ while (index < 10) {
 ```
 
 # Looping doesn't work
+```JavaScript
 var index = 10 // nilainya udah falsy dari awal, gakepenuhin conditionnya
 while (index < 10) {
   console.log("INFINITE LOOPING NIH")
   index = 1 + 1
 }
-
+```
 
 # for and if
 ```JavaScript
