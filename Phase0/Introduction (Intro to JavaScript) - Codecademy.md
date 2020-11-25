@@ -1,5 +1,23 @@
 # Lesson : Introduction to JavaScript
 
+## 6. Properties
+When you introduce a new piece of data into a JavaScript program, the browser saves it as an instance of the data type. Every string instance has a property called length that stores the number of characters in that string. You can retrieve property information by appending the string with a period and the property name:
+```Javascript
+console.log('Hello'.length); // Prints 5
+```
+The `.` is another operator! We call it the dot operator.
+
+In the example above, the value saved to the length property is retrieved from the instance of the string, 'Hello'. The program prints 5 to the console, because Hello has five characters in it.
+
+Instructions
+1. Use the `.length` property to log the number of characters in the following string to the console:
+`'Teaching the world how to code'`
+
+**Answer**
+```Javascript
+console.log('Teaching the world how to code'.length);
+```
+
 
 
 ## 8. Built-in Objects
