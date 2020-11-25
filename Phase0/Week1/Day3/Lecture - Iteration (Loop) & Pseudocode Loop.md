@@ -145,6 +145,7 @@ while (index < 10) {
 
 
 # for and if
+```JavaScript
 for (var i = 1; i < 10; i++) {
   if (i > 5) {
     console.log("i udah lebih dari 5 bos")
@@ -158,3 +159,4 @@ while (itung1 < 10) {
    }
   itung1++
 }
+```
