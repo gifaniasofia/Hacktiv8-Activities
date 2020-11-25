@@ -1,3 +1,10 @@
+<mark> Note : </mark>
+| Syntax |	Bahasa |
+|--------|---------|
+| for	| Lakukan sesuatu sebanyak x kali |
+| while	| Selama kondisi true lakukan sesuatu |
+| do...while | Lakukan sesuatu selama kondisi true |
+
 # 1. The For Loop
 
 Instead of writing out the same code over and over, loops allow us to tell computers to repeat a given block of code on its own. One way to give computers these instructions is with a for loop.
