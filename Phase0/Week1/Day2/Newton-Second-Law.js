@@ -15,7 +15,7 @@ PSEUDOCODE
 ============
 STORE massa AS Number WITH 600
 STORE pecepatan AS Number WITH 2
-STORE resultanGaya AS Number WITH ANY VALUE
+STORE resultanGaya AS Number WITH 0
 
 SET resultanGaya WITH massa TIMES percepatan
 
