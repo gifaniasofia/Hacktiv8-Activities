@@ -5,9 +5,10 @@ Tetapi untuk pembahasan kali ini kita hanya akan membahas perbedaan const, let d
 # const, let dan var
 
 `const` merupakan keyword baru di ES6. Konsep `const` biasanya dipakai ketika value pada variabel ini bersifat tetap, tidak dapat di-assign ulang.
-
+```Javascript
 const pi = 3.14
 pi = 3  //output: TypeError: Assignment to constant variable.
+```
 
 sedangkan untuk `let` dapat di-assign ulang tetapi hanya dapat dikenali di dalam block bracket ‘{}’ terdekatnya saja
 ```Javascript
