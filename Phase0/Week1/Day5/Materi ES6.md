@@ -33,13 +33,15 @@ var word = 'bar';
 ```
 
 Variable, atau dalam bahasa Indonesia kita sebut variabel, bisa memegang atau berisi hampir semua tipe data yang tersedia. Variabel memungkinkan kita untuk memuat atau menyimpan nilai data ke dalam sesuatu. Biasanya bersifat sementara saat program dijalankan.
-
+```Javascript
 var tampung = 5;
 console.log(tampung); // 5
 var angkaGanjil = 1;
 var angkaGenap = 2;
 console.log(angkaGanjil); // 1
 console.log(angkaGenap); // 2
+```
+
 ⚠️ Waspadai pemanggilan variable yang tidak bernilai!
 
 ```Javascript
