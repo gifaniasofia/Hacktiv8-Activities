@@ -67,9 +67,11 @@ Menjalankan i sekali -> jalanin j hingga kondisi terpenuhi -> jalanin i lagi sek
 
 CONTOH :
 MAU BIKIN :
+```
 1234
 1234
 1234
+```
 
 ```JavaScript
 // coba buat *1234* dulu
@@ -97,11 +99,13 @@ for (var j = 1; j <= num; j++) {
 variabel penampung yang mau direset itu masukin di dalem for loopingan yang pertama.
 
 CONTOH :
+```
 1
 12
 123
 1234
 12345
+```
 
 ```JavaScript
 var num = 3
@@ -116,7 +120,7 @@ for (var i = 1; i < num; i++) {
 ```
 
 CONTOH HITUNG HURUF i/I
-
+```JavaScript
 var string = 'Hacktiv8 Indonesia'
 var counter = 0
 
@@ -127,8 +131,9 @@ for (var i = 0; i < string.length; i++) {
   }
 }
 console.log(counter, 'ini adalah jumlah huruf i')
+```
 
-
+```JavaScript
 var string = 'Hacktiv8 Indonesia'
 var kamusVocal = 'aiueoAIUEO'
 var counter = 0
@@ -142,9 +147,11 @@ for (var i = 0; i < string.length; i++) {
   }
 }
 console.log(counter)
+```
 
 
 contoh:
+```
 ********
 *      *
 *      *
@@ -155,6 +162,8 @@ contoh:
 *      *
 *      *
 ********
+```
+
 row---> 8
 column---> 8
 
