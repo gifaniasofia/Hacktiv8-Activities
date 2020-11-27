@@ -169,5 +169,3 @@ console.log(`${nama} dari kelas ${kelas}
 pergi ke pasar membawa uang Rp.${uang - 5000}
 untuk membeli ${belanjaan}`)
 ```
-
-
