@@ -301,8 +301,10 @@ To declare a function expression:
 2. Assign as that variable’s value an anonymous function created by using the function keyword followed by a set of parentheses with possible parameters. Then a set of curly braces that contain the function body.
 
 To invoke a function expression, write the name of the variable in which the function is stored followed by parentheses enclosing any arguments being passed into the function.
-
+```JavaScript
 variableName(argument1, argument2)
+```
+
 Unlike function declarations, function expressions are not hoisted so they cannot be called before they are defined.
 
 Let’s define a new function using a function expression.
@@ -378,7 +380,65 @@ JavaScript also provides several ways to refactor arrow function syntax. The mos
 
 1. Functions that take only a single parameter do not need that parameter to be enclosed in parentheses. However, if a function takes zero or multiple parameters, parentheses are required.
 
-![function arrows](img/codecademy-function8.png "CODECADEMY-FUNCTION-arrows")
+![function arrows](img/codecademy-function9.png "CODECADEMY-FUNCTION-arrows")
 
 2. A function body composed of a single-line block does not need curly braces. Without the curly braces, whatever that line evaluates will be automatically returned. The contents of the block should immediately follow the arrow => and the return keyword can be removed. This is referred to as implicit return.
 
+![function arrows return](img/codecademy-function10.png "CODECADEMY-FUNCTION-arrows-return")
+
+So if we have a function:
+```JavaScript
+const squareNum = (num) => {
+  return num * num;
+};
+```
+
+We can refactor the function to:
+```JavaScript
+const squareNum = num => num * num;
+```
+
+Notice the following changes:
+- The parentheses around num have been removed, since it has a single parameter.
+- The curly braces { } have been removed since the function consists of a single-line block.
+- The return keyword has been removed since the function consists of a single-line block.
+
+**Instructions**
+1. Let’s refactor plantNeedsWater() to be a concise body. Notice that we’ve already converted the if/else statement to a ternary operator to make the code fit on one line.
+
+```JavaScript
+const plantNeedsWater = day =>  day === 'Wednesday' ? true : false;
+```
+
+# Review Functions
+Give yourself a pat on the back, you just navigated through functions!
+
+In this lesson, we covered some important concepts about functions:
+- A function is a reusable block of code that groups together a sequence of statements to perform a specific task.
+- A function declaration :
+
+![function reviews 1](img/codecademy-function11.png "CODECADEMY-FUNCTION-reviews1")
+
+- A parameter is a named variable inside a function’s block which will be assigned the value of the argument passed in when the function is invoked:
+
+
+![function reviews 2](img/codecademy-function12.png "CODECADEMY-FUNCTION-reviews2")
+
+To call a function in your code:
+![function reviews 3](img/codecademy-function13.png "CODECADEMY-FUNCTION-reviews3")
+
+- ES6 introduces new ways of handling arbitrary parameters through default parameters which allow us to assign a default value to a parameter in case no argument is passed into the function.
+
+- To return a value from a function, we use a return statement.
+
+- To define a function using function expressions:
+
+![function reviews 4](img/codecademy-function14.png "CODECADEMY-FUNCTION-reviews4")
+
+- To define a function using arrow function notation:
+
+![function reviews 5](img/codecademy-function15.png "CODECADEMY-FUNCTION-reviews5")
+
+- Function definition can be made concise using concise arrow notation:
+
+![function reviews 6](img/codecademy-function16.png "CODECADEMY-FUNCTION-reviews6")
