@@ -54,11 +54,11 @@ However, a function declaration does not ask the code inside the function body t
 
 To call a function in your code, you type the function name followed by parentheses.
 
-![function identifier](img/codecademy-function2.png "CODECADEMY-FUNCTION-identifier")
+![function identifier](img/codecademy-function2.jpg "CODECADEMY-FUNCTION-identifier")
 
 This function call executes the function body, or all of the statements between the curly braces in the function declaration.
 
-![function call](img/codecademy-function3.png "CODECADEMY-FUNCTION-call")
+![function call](img/codecademy-function3.jpg "CODECADEMY-FUNCTION-call")
 
 We can call the same function as many times as needed.
 
@@ -94,17 +94,17 @@ So far, the functions we’ve created execute a task without an input. However, 
 
 Let’s observe how to specify parameters in our function declaration:
 
-![function parameters](img/codecademy-function4.png "CODECADEMY-FUNCTION-params")
+![function parameters](img/codecademy-function4.jpg "CODECADEMY-FUNCTION-params")
 
 In the diagram above, calculateArea(), computes the area of a rectangle, based on two inputs, width and height. The parameters are specified between the parenthesis as width and height, and inside the function body, they act just like regular variables. width and height act as placeholders for values that will be multiplied together.
 
 When calling a function that has parameters, we specify the values in the parentheses that follow the function name. The values that are passed to the function when it is called are called arguments. Arguments can be passed to the function as values or variables.
 
-![function parameters](img/codecademy-function5.png "CODECADEMY-FUNCTION-params")
+![function parameters](img/codecademy-function5.jpg "CODECADEMY-FUNCTION-params")
 
 In the function call above, the number 10 is passed as the width and 6 is passed as height. Notice that the order in which arguments are passed and assigned follows the order that the parameters are declared.
 
-![function parameters](img/codecademy-function6.png "CODECADEMY-FUNCTION-params")
+![function parameters](img/codecademy-function6.jpg "CODECADEMY-FUNCTION-params")
 
 The variables rectWidth and rectHeight are initialized with the values for the height and width of a rectangle before being used in the function call.
 
@@ -188,7 +188,7 @@ console.log(rectangleArea(5, 7)) // Prints undefined
 
 In the code example, we defined our function to calculate the area of a width and height parameter. Then rectangleArea() is invoked with the arguments 5 and 7. But when we went to print the results we got undefined. Did we write our function wrong? No! In fact, the function worked fine, and the computer did calculate the area as 35, but we didn’t capture it. So how can we do that? With the keyword return!
 
-![function return](img/codecademy-function7.png "CODECADEMY-FUNCTION-return")
+![function return](img/codecademy-function7.jpg "CODECADEMY-FUNCTION-return")
 
 To pass back information from the function call, we use a return statement. To create a return statement, we use the return keyword followed by the value that we wish to return. Like we saw above, if the value is omitted, undefined is returned instead.
 
@@ -292,7 +292,7 @@ Another way to define a function is to use a function expression. To define a fu
 
 Consider the following function expression:
 
-![function expression](img/codecademy-function8.png "CODECADEMY-FUNCTION-exp")
+![function expression](img/codecademy-function8.jpg "CODECADEMY-FUNCTION-exp")
 
 To declare a function expression:
 
@@ -380,11 +380,11 @@ JavaScript also provides several ways to refactor arrow function syntax. The mos
 
 1. Functions that take only a single parameter do not need that parameter to be enclosed in parentheses. However, if a function takes zero or multiple parameters, parentheses are required.
 
-![function arrows](img/codecademy-function9.png "CODECADEMY-FUNCTION-arrows")
+![function arrows](img/codecademy-function9.jpg "CODECADEMY-FUNCTION-arrows")
 
 2. A function body composed of a single-line block does not need curly braces. Without the curly braces, whatever that line evaluates will be automatically returned. The contents of the block should immediately follow the arrow => and the return keyword can be removed. This is referred to as implicit return.
 
-![function arrows return](img/codecademy-function10.png "CODECADEMY-FUNCTION-arrows-return")
+![function arrows return](img/codecademy-function10.jpg "CODECADEMY-FUNCTION-arrows-return")
 
 So if we have a function:
 ```JavaScript
@@ -417,15 +417,15 @@ In this lesson, we covered some important concepts about functions:
 - A function is a reusable block of code that groups together a sequence of statements to perform a specific task.
 - A function declaration :
 
-![function reviews 1](img/codecademy-function11.png "CODECADEMY-FUNCTION-reviews1")
+![function reviews 1](img/codecademy-function11.jpg "CODECADEMY-FUNCTION-reviews1")
 
 - A parameter is a named variable inside a function’s block which will be assigned the value of the argument passed in when the function is invoked:
 
 
-![function reviews 2](img/codecademy-function12.png "CODECADEMY-FUNCTION-reviews2")
+![function reviews 2](img/codecademy-function12.jpg "CODECADEMY-FUNCTION-reviews2")
 
 To call a function in your code:
-![function reviews 3](img/codecademy-function13.png "CODECADEMY-FUNCTION-reviews3")
+![function reviews 3](img/codecademy-function13.jpg "CODECADEMY-FUNCTION-reviews3")
 
 - ES6 introduces new ways of handling arbitrary parameters through default parameters which allow us to assign a default value to a parameter in case no argument is passed into the function.
 
@@ -433,12 +433,12 @@ To call a function in your code:
 
 - To define a function using function expressions:
 
-![function reviews 4](img/codecademy-function14.png "CODECADEMY-FUNCTION-reviews4")
+![function reviews 4](img/codecademy-function14.jpg "CODECADEMY-FUNCTION-reviews4")
 
 - To define a function using arrow function notation:
 
-![function reviews 5](img/codecademy-function15.png "CODECADEMY-FUNCTION-reviews5")
+![function reviews 5](img/codecademy-function15.jpg "CODECADEMY-FUNCTION-reviews5")
 
 - Function definition can be made concise using concise arrow notation:
 
-![function reviews 6](img/codecademy-function16.png "CODECADEMY-FUNCTION-reviews6")
+![function reviews 6](img/codecademy-function16.jpg "CODECADEMY-FUNCTION-reviews6")
