@@ -322,7 +322,7 @@ console.log(pastaIndex);
 Throughout the lesson we went over arrays being mutable, or changeable. Well what happens if we try to change an array inside a function? Does the array keep the change after the function call or is it scoped to inside the function?
 
 Take a look at the following example where we call .push() on an array inside a function. Recall, the .push() method mutates, or changes, an array:
-
+```JavaScript
 const flowers = ['peony', 'daffodil', 'marigold'];
  
 function addFlower(arr) {
@@ -332,6 +332,7 @@ function addFlower(arr) {
 addFlower(flowers);
  
 console.log(flowers); // Output: ['peony', 'daffodil', 'marigold', 'lily']
+```
 Let’s go over what happened in the example:
 
 The flowers array that has 3 elements.
