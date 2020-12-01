@@ -23,7 +23,7 @@ function printMessageHello() {
   console.log(sayaDiluar) // BAD PRACTICE
 }
 ```
-
+Parameter itu kayak variabel. jadi misal di dalem function nama variabelnya sama kayak nama parameter si function. Jadi error
 
 ```JavaScript
 function hello(tugas1, tugas2, tugas3) {
@@ -47,7 +47,7 @@ for (let i = 0; i < listNama.length; i++) {
 }
 ```
 
-``JavaScript
+```JavaScript
 function cekPalindrom(kata) {
     let kataTerbalik = ''
 
@@ -87,4 +87,67 @@ while (cekPalindrom(String(angka)) === false) {
   angka++
 }
 console.log(angka)
+
+// ATAU
+let hasilCek = cekPalindrom(String(angka))
+while (hasilCek === false) {
+  angka++
+}
+console.log(angka)
+
+```
+```JavaScript
+function print(nama, tempat) {
+  let message = `selamat datang ${nama} di ${tempat}`
+  console.log(message)
+  return 'selesai print'
+  
+ console.log(print('haydar', 'kelas'))
+}
+```
+
+```JavaScript
+function keDapur(pesanan) {
+  return pesanan + ' matang'
+  
+ console.log(keDapur('mie'))
+}
+```
+
+```JavaScript
+function print(nama, batch, isPria) {
+  let message = ''
+  if (isPria) {
+    message = `selamat datang ${nama} di ${batch}`
+  } else {
+    message = `selamat datang ${nama} di ${batch} @female-dev`
+  }
+  
+  return message
+  
+console.log(print('anna', 8, true))
+console.log(print('teddy', 21, false))
+}
+```
+
+
+```JavaScript
+function print(nama, batch, isPria) {
+  if (typeof batch != 'number') {
+    return 'invalid input'
+  }
+  
+  let message = ''
+  if (isPria) {
+    message = `selamat datang ${nama} di ${batch}`
+  } else {
+    message = `selamat datang ${nama} di ${batch} @female-dev`
+  }
+  
+  return message
+  
+console.log(print('anna', 8, true))
+console.log(print('teddy', 21, false))
+console.log(print('anita', 'hai', false))
+}
 ```
