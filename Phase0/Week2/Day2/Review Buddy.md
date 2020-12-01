@@ -35,3 +35,21 @@ console.log(outputDariFunctionGreet)
 
 console.log(greet[]) // 'data kosong'
 ```
+
+kalo string, bisa cek data kosongnya dengan berbagai cara:
+
+```JavaScript
+let name = '';
+if (!name || name === '' || name.length === 0) {
+  console.log('ini string kosong')
+}
+
+// sedangkan, kalau data kosong array :
+
+let arrName = []
+if (arrName.length === 0) {
+  console.log('ini array kosong')
+}
+```
+
+kenapaa? karena `console.log([] === [])` ADALAH FALSE. satu array dengan array lainnya meskipun sama-sama kosong tetep 2 hal yang berbeda. ibarat 1 lemari baju yang kosong tidak sama dengan lemari buku yang kosong.
