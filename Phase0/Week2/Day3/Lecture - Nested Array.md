@@ -39,7 +39,7 @@ let input = [
   ['Albert', 17, false],
   ['Punjab', 40, false],
   ['Krisha', 25, false],
-  ['Saanvi', 23, true],
+  ['Saanvi', 40, true],
   ['Vihaan', 36, false],
   ['Reyansh', 28, true],
 ]
@@ -69,21 +69,36 @@ for (let i = 0; i < input.length; i++) {
 }
 
 // Nomor 4
+/*
+ALGORITMA
+a. Mencari umur paling tinggi dulu
+b. Mencari record yang umurnya sama dengan umur tertinggi, masukkan ke penampung
+*/
 
-// Cara 1
-let banding = 0;
+// Proses A --> harus looping sampai selesai buat menyimpulkan umur tertua adalah 40
+let oldestAge = 0;
 let penampung = [];
 
 for (let i = 0; i < input.length; i++) {
-  if (input[i][1] > banding) {
-    banding = input[i][1];
-    penampung = input[i];
+  if (input[i][1] > oldestAge) {
+    oldestAge = input[i][1];
   }
 }
 
-console.log(penampung)
+console.log('Oldest age: ', oldestAge);
 
-// Cara 2
+// Proses B
+let output = [];
+
+for (let i = 0; i < input.length; i++) {
+  if (input[i][1] === oldestAge) {
+    output.push(input[i]);
+  }
+}
+console.log(output);
+
+// ============================================================================//
+// Cara 2 - Proses A&B tapi ini mah cuma nampilin yang umur 40 nya orang paling awal doang, bukan semua yang umurnya 40
 let banding = 0;
 let highestIndex = 0;
 
@@ -95,5 +110,14 @@ for (let i = 0; i < input.length; i++) {
 }
 
 console.log(input[highestIndex]);
+
+// Nomor 5
+
+let totalAge = 0;
+for (let i = 0; i < input.length; i++) {
+  totalAge += input[i][1];
+}
+let avgTotalAge = totalAge / input.length;
+console.log(avgTotalAge);
 
 ```
