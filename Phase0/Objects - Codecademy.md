@@ -326,4 +326,244 @@ In the preceding code:
 - We accessed the back-up object by appending ['back-up'].
 - The back-up object has a battery property, accessed with .battery which returned the value stored there: 'Lithium'
 
+**Instructions**
+1. Create a variable capFave and assign the captain‘s favorite food (the element in the 0th index of her 'favorite foods' array) to it. Make sure to use bracket and dot notation to get the value of the food through nested access (don’t just copy the value into the variable!)
 
+2. Right now the passengers property has a value of null. Instead, assign as its value an array of objects. These objects should represent the spaceship‘s passengers as individual objects. Make at least one passenger object in the array that has at least one key-value pair on it.
+
+3. Create a variable firstPassenger and assign the first passenger as its value (the element in the 0th index of the spaceship.passengers array you just made). Make sure to use bracket and dot notation to get the passenger object through nested access (don’t just copy the object into the variable!)
+
+Hint
+```js
+spaceship.passengers[0]
+```
+
+**Answer**
+```js
+let spaceship = {
+  passengers: [{name: 'Space Dog'}], 
+  telescope: {
+    yearBuilt: 2018,
+    model: "91031-XLT",
+    focalLength: 2032 
+  },
+  crew: {
+    captain: { 
+      name: 'Sandra', 
+      degree: 'Computer Engineering', 
+      encourageTeam() { console.log('We got this!') },
+     'favorite foods': ['cookies', 'cakes', 'candy', 'spinach'] }
+  },
+  engine: {
+    model: "Nimbus2000"
+  },
+  nanoelectronics: {
+    computer: {
+      terabytes: 100,
+      monitors: "HD"
+    },
+    'back-up': {
+      battery: "Lithium",
+      terabytes: 50
+    }
+  }
+}; 
+
+let capFave = spaceship.crew.captain['favorite foods'][0];
+
+let firstPassenger = spaceship.passengers[0];
+```
+
+# Pass By Reference
+Objects are passed by reference. This means when we pass a variable assigned to an object into a function as an argument, the computer interprets the parameter name as pointing to the space in memory holding that object. As a result, functions which change object properties actually mutate the object permanently (even when the object is assigned to a const variable).
+```js
+const spaceship = {
+  homePlanet : 'Earth',
+  color : 'silver'
+};
+ 
+let paintIt = obj => {
+  obj.color = 'glorious gold'
+};
+ 
+paintIt(spaceship);
+ 
+spaceship.color // Returns 'glorious gold'
+```
+
+Our function paintIt() permanently changed the color of our spaceship object. However, reassignment of the spaceship variable wouldn’t work in the same way:
+```js
+let spaceship = {
+  homePlanet : 'Earth',
+  color : 'red'
+};
+let tryReassignment = obj => {
+  obj = {
+    identified : false, 
+    'transport type' : 'flying'
+  }
+  console.log(obj) // Prints {'identified': false, 'transport type': 'flying'}
+ 
+};
+tryReassignment(spaceship) // The attempt at reassignment does not work.
+spaceship // Still returns {homePlanet : 'Earth', color : 'red'};
+ 
+spaceship = {
+  identified : false, 
+  'transport type': 'flying'
+}; // Regular reassignment still works.
+```
+
+Let’s look at what happened in the code example:
+
+- We declared this spaceship object with let. This allowed us to reassign it to a new object with identified and 'transport type' properties with no problems.
+- When we tried the same thing using a function designed to reassign the object passed into it, the reassignment didn’t stick (even though calling console.log() on the object produced the expected result).
+- When we passed spaceship into that function, obj became a reference to the memory location of the spaceship object, but not to the spaceship variable. This is because the obj parameter of the tryReassignment() function is a variable in its own right. The body of tryReassignment() has no knowledge of the spaceship variable at all!
+- When we did the reassignment in the body of tryReassignment(), the obj variable came to refer to the memory location of the object {'identified' : false, 'transport type' : 'flying'}, while the spaceship variable was completely unchanged from its earlier value.
+
+**Instructions**
+1. Write a function greenEnergy() that has an object as a parameter and sets that object’s 'Fuel Type' property to 'avocado oil'.
+
+Hint
+```js
+let functionName = objectParam => {
+  objectParam['Property Name'] = 'New Property Value';
+};
+```
+2. Write a function remotelyDisable() that has an object as a parameter and sets (or reassigns) that object’s disabled property to true.
+
+Hint
+```js
+let functionName = objectParam => {
+  objectParam.propertyName = 'A Property Value';
+};
+```
+
+3. Call your two functions with the spaceship object in the code editor, then console.log() the spaceship object to confirm those properties were changed/added.
+
+**Answer**
+```js
+let spaceship = {
+  'Fuel Type' : 'Turbo Fuel',
+  homePlanet : 'Earth'
+};
+
+// Write your code below
+let greenEnergy = obj => {
+  obj['Fuel Type'] = 'avocado oil'
+}
+
+let remotelyDisable = obj => {
+  obj['disabled'] = true
+}
+
+greenEnergy(spaceship)
+remotelyDisable(spaceship)
+
+console.log(spaceship)
+```
+
+# Looping Through Objects
+Loops are programming tools that repeat a block of code until a condition is met. We learned how to iterate through arrays using their numerical indexing, but the key-value pairs in objects aren’t ordered! JavaScript has given us alternative solution for iterating through objects with the for...in syntax .
+
+`for...in` will execute a given block of code for each property in an object.
+```js
+let spaceship = {
+  crew: {
+    captain: { 
+      name: 'Lily', 
+      degree: 'Computer Engineering', 
+      cheerTeam() { console.log('You got this!') } 
+    },
+    'chief officer': { 
+      name: 'Dan', 
+      degree: 'Aerospace Engineering', 
+      agree() { console.log('I agree, captain!') } 
+    },
+    medic: { 
+      name: 'Clementine', 
+      degree: 'Physics', 
+      announce() { console.log(`Jets on!`) } },
+    translator: {
+      name: 'Shauna', 
+      degree: 'Conservation Science', 
+      powerFuel() { console.log('The tank is full!') } 
+    }
+  }
+}; 
+ 
+// for...in
+for (let crewMember in spaceship.crew) {
+  console.log(`${crewMember}: ${spaceship.crew[crewMember].name}`);
+}
+```
+
+Our `for...in` will iterate through each element of the spaceship.crew object. In each iteration, the variable crewMember is set to one of spaceship.crew‘s keys, enabling us to log a list of crew members’ role and name.
+
+Instructions
+1. Using for...in, iterate through the spaceship.crew object in the code editor and console.log() a list of crew roles and names in the following format: '[crew member's role]: [crew member's name]', e.g.,'chief officer: Dan'.
+
+Hint
+```js
+for (let variableName in outerObject.innerObject) {
+  console.log(`${variableName}: ${outerObject.innerObject[variableName].propertyName}`)
+};
+```
+2. Using for...in, iterate through the spaceship.crew object in the code editor and console.log() a list of crew names and degrees in the following format: '[crew member's name]: [crew member's degree]', i.e.,'Lily: Computer Engineering'.
+
+Hint
+```js
+for (let variableName in outerObject.innerObject) {
+  console.log(`${outerObject.innerObject[variableName].propertyName}: ${outerObject.innerObject[variableName].differentPropertyName}`)
+};
+```
+
+**Answer**
+```js
+let spaceship = {
+    crew: {
+    captain: { 
+        name: 'Lily', 
+        degree: 'Computer Engineering', 
+        cheerTeam() { console.log('You got this!') } 
+        },
+    'chief officer': { 
+        name: 'Dan', 
+        degree: 'Aerospace Engineering', 
+        agree() { console.log('I agree, captain!') } 
+        },
+    medic: { 
+        name: 'Clementine', 
+        degree: 'Physics', 
+        announce() { console.log(`Jets on!`) } },
+    translator: {
+        name: 'Shauna', 
+        degree: 'Conservation Science', 
+        powerFuel() { console.log('The tank is full!') } 
+        }
+    }
+}; 
+
+// Write your code below
+for (let crewMember in spaceship.crew) {
+  console.log(`${crewMember}: ${spaceship.crew[crewMember]['name']}`)
+}
+
+for (let crewMember in spaceship.crew) {
+  console.log(`${spaceship.crew[crewMember]['name']}: ${spaceship.crew[crewMember]['degree']}`)
+}
+```
+
+# Review
+Way to go! You’re well on your way to understanding the mechanics of objects in JavaScript. By building your own objects, you will have a better understanding of how JavaScript built-in objects work as well. You can also start imagining organizing your code into objects and modeling real world things in code.
+
+Let’s review what we learned in this lesson:
+- Objects store collections of key-value pairs.
+- Each key-value pair is a property—when a property is a function it is known as a method.
+- An object literal is composed of comma-separated key-value pairs surrounded by curly braces.
+- You can access, add or edit a property within an object by using dot notation or bracket notation.
+- We can add methods to our object literals using key-value syntax with anonymous function expressions as values or by using the new ES6 method syntax.
+- We can navigate complex, nested objects by chaining operators.
+- Objects are mutable—we can change their properties even when they’re declared with const.
+- Objects are passed by reference— when we make changes to an object passed into a function, those changes are permanent.
+- We can iterate through objects using the `For...in` syntax.
