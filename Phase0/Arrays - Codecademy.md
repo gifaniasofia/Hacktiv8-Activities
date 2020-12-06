@@ -67,7 +67,7 @@ Each element in an array has a numbered position known as its index. We can acce
 
 Arrays in JavaScript are zero-indexed, meaning the positions start counting from 0 rather than 1. Therefore, the first item in an array will be at position 0. Let’s see how we could access an element in an array:
 
-![array accessing](img/array1.png "CODECADEMY-ARRAY-ACCESSING")
+![array accessing](img/array1.jpg "CODECADEMY-ARRAY-ACCESSING")
 
 In the code snippet above:
 
