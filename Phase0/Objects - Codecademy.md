@@ -16,6 +16,8 @@ let spaceship = {}; // spaceship is an empty object
 
 We fill an object with unordered data. This data is organized into key-value pairs. A key is like a variable name that points to a location in memory that holds a value.
 
+![objects-key-value](img/page2-1.png)
+
 
 A key’s value can be of any data type in the language including functions or other objects.
 
