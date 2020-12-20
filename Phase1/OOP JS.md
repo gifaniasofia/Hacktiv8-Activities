@@ -1,0 +1,2 @@
+# Class
+Class adalah sebuah blueprint pada konsep OOP. Secara umum, pengertian blueprint berdasarkan Oxford Dictionary adalah deskripsi yang mendetil mengenai suatu rencana. Dalam hal pemrograman, class adalah rancangan struktur awal dari objek yang akan dibuat. Misalnya kita ingin membuat sebuah objek yang memuat data dan fungsi dari mobil, maka sebelum kita membuat objek mobil tersebut, kita akan membuat sebuah class terlebih dahulu.
