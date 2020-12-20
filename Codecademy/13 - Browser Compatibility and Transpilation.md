@@ -44,4 +44,4 @@ const carbonara = `You can make carbonara with ${pasta}, ${meat}, and a sauce ma
 
 **Result**
 
-![page1 result] (img/codecademy-browser1.png "CODECADEMY-BROWSER-1")
+![page1_result] (img/codecademy-browser1.png "CODECADEMY-BROWSER-1")
