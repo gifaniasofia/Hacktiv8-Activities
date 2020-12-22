@@ -259,11 +259,169 @@ Let’s break down what’s happening in the example code:
 Let’s write some `onFulfilled` and `onRejected` functions!
 
 **Instructions**
+1. Take a look at the provided code. We require in a function, checkInventory(). It builds on the logic of the orderSunglasses() function you wrote in a previous exercise.
+- checkInventory() takes in an array representing an order and returns a promise.
+- If every item in the order is in stock, that promise resolves with the value "Thank you. Your order was successful."
+- Otherwise, the promise rejects with the value "We're sorry. Your order could not be completed because some items are sold out".
 
+We used setTimeout() to ensure that the checkInventory() promise settles asynchronously.
+
+If you’d like, look at the library.js file to see how it works. Press “Check Work” when you’re ready to move on.
+
+2. Write a function, handleSuccess(). You’ll use this function later on as your success handler. handleSuccess() should have one parameter, representing a resolved value. Inside the body of handleSuccess(), log the parameter to the console.
+
+3. Write a function, handleFailure(). You’ll use this function later on as your failure handler. handleFailure() should have one parameter, representing a rejection reason. Inside the body of handleFailure(), log the parameter to the console.
+
+4. Invoke checkInventory() with order. This will return a promise. Attach a .then() function to this. Pass into .then() the two handlers you wrote as callback functions.
+
+5. Type node app.js in the terminal and hit enter.
+
+**library.js**
+```js
+const inventory = {
+  sunglasses: 1900,
+  pants: 1088,
+  bags: 1344
+};
+
+const checkInventory = (order) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      let inStock = order.every(item => inventory[item[0]] >= item[1]);
+      if (inStock) {
+        resolve(`Thank you. Your order was successful.`);
+      } else {
+        reject(`We're sorry. Your order could not be completed because some items are sold out.`);
+      }
+    }, 1000);
+  })
+};
+
+module.exports = { checkInventory };
+```
 
 **Answer**
-```js
+-> app.js
 
+```js
+const {checkInventory} = require('./library.js');
+
+const order = [['sunglasses', 1], ['bags', 2]];
+
+// Write your code below:
+const handleSuccess = (resolvedValue) => {
+  console.log(resolvedValue);
+};
+
+const handleFailure = (rejectReason) => {
+  console.log(rejectReason);
+};
+
+checkInventory(order)
+  .then(handleSuccess, handleFailure);
+```
+
+**Result**
+```
+$ node app.js
+Thank you. Your order was successful.
+$ 
+```
+
+# Using catch() with Promises
+One way to write cleaner code is to follow a principle called separation of concerns. Separation of concerns means organizing code into distinct sections each handling a specific task. It enables us to quickly navigate our code and know where to look if something isn’t working.
+
+Remember, `.then()` will return a promise with the same settled value as the promise it was called on if no appropriate handler was provided. This implementation allows us to separate our resolved logic from our rejected logic. Instead of passing both handlers into one `.then()`, we can chain a second `.then()` with a failure handler to a first `.then()` with a success handler and both cases will be handled.
+```js
+prom
+  .then((resolvedValue) => {
+    console.log(resolvedValue);
+  })
+  .then(null, (rejectionReason) => {
+    console.log(rejectionReason);
+  });
+```
+
+Since JavaScript doesn’t mind whitespace, we follow a common convention of putting each part of this chain on a new line to make it easier to read. To create even more readable code, we can use a different promise function: `.catch()`.
+
+The `.catch()` function takes only one argument, `onRejected`. In the case of a rejected promise, this failure handler will be invoked with the reason for rejection. Using `.catch()` accomplishes the same thing as using a `.then()` with only a failure handler.
+
+Let’s look at an example using `.catch()`:
+```js
+prom
+  .then((resolvedValue) => {
+    console.log(resolvedValue);
+  })
+  .catch((rejectionReason) => {
+    console.log(rejectionReason);
+  });
+```
+
+Let’s break down what’s happening in the example code:
+- `prom` is a promise which randomly either resolves with `'Yay!'` or rejects with `'Ohhh noooo!'`.
+- We pass a success handler to `.then()` and a failure handler to `.catch()`.
+- If the promise resolves, `.then()`‘s success handler will be invoked with `'Yay!'`.
+- If the promise rejects, `.then()` will return a promise with the same rejection reason as the original promise and `.catch()`‘s failure handler will be invoked with that rejection reason.
+
+Let’s practice writing .catch() functions.
+
+**Instructions**
+1. We’re going to refactor the functionality of the previous exercise but this time we’ll use .catch()! First invoke the checkInventory() function with the order. Remember, this function will return a promise.
+2. Add a .then() to the returned promise. Pass in the success handler handleSuccess().
+3. Add a .catch() to the returned promise. Pass in the failure handler handleFailure().
+4. We set our inventory of sunglasses to 0, so the order shouldn’t go through. Let’s make sure our code has the expected results. Type node app.js in the terminal and hit enter.
+
+**library.js**
+```js
+const inventory = {
+  sunglasses: 0,
+  pants: 1088,
+  bags: 1344
+};
+
+const checkInventory = (order) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            let inStock = order.every(item => inventory[item[0]] >= item[1]);
+            if (inStock) {
+                resolve(`Thank you. Your order was successful.`);
+            } else {
+                reject(`We're sorry. Your order could not be completed because some items are sold out.`);
+            }
+        }, 1000);
+    });
+};
+
+module.exports = {checkInventory};
+```
+
+**Answer** 
+-> app.js
+
+```js
+const {checkInventory} = require('./library.js');
+
+const order = [['sunglasses', 1], ['bags', 2]];
+
+const handleSuccess = (resolvedValue) => {
+  console.log(resolvedValue);
+};
+
+const handleFailure = (rejectReason) => {
+  console.log(rejectReason);
+};
+
+// Write your code below:
+checkInventory(order)
+  .then(handleSuccess)
+  .catch(handleFailure)
+```
+
+**Result**
+```
+$ node app.js
+We're sorry. Your order could not be completed because some items are sold out.
+$ 
 ```
 
 #
@@ -273,4 +431,140 @@ Let’s write some `onFulfilled` and `onRejected` functions!
 
 
 
+**Instructions**
+1. Take a look at the provided code. We require in three functions: checkInventory(), processPayment(), shipOrder(). These functions each return a promise.
 
+- checkInventory() expects an order argument and returns a promise. If there are enough items in stock to fill the order, the promise will resolve to an array. The first element in the resolved value array will be the same order and the second element will be the total cost of the order as a number.
+- processPayment() expects an array argument with the order as the first element and the purchase total as the second. This function returns a promise. If there is a large enough balance on the giftcard associated with the order, it will resolve to an array. The first element in the resolved value array will be the same order and the second element will be a tracking number.
+- shipOrder() expects an array argument with the order as the first element and a tracking number as the second. It returns a promise which resolves to a string confirming the order has shipped.
+
+If you’d like, look at the library.js file to see how these functions work. Press “Check Work” when you’re ready to move on to the next checkpoint.
+
+2. We set up a promise chain but it’s missing a couple important lines of code to make it function properly.
+
+We invoked checkInventory() with order and chained a .then() function to it. This .then() has an anonymous function as its success handler, but it’s missing a return statement.
+
+The success handler should return a processPayment() promise.
+
+3. We have a second .then() function on the chain. This .then() also has an anonymous function as its success handler and is missing a return statement.
+
+The success handler should return a shipOrder() promise.
+
+4. Type node app.js in the terminal and hit enter.
+
+**library.js**
+```js
+const store = {
+  sunglasses: {
+    inventory: 817, 
+    cost: 9.99
+  },
+  pants: {
+    inventory: 236, 
+    cost: 7.99
+  },
+  bags: {
+    inventory: 17, 
+    cost: 12.99
+  }
+};
+
+const checkInventory = (order) => {
+  return new Promise ((resolve, reject) => {
+   setTimeout(()=> {  
+   const itemsArr = order.items;  
+   let inStock = itemsArr.every(item => store[item[0]].inventory >= item[1]);
+   
+   if (inStock){
+     let total = 0;   
+     itemsArr.forEach(item => {
+       total += item[1] * store[item[0]].cost
+     });
+     console.log(`All of the items are in stock. The total cost of the order is ${total}.`);
+     resolve([order, total]);
+   } else {
+     reject(`The order could not be completed because some items are sold out.`);
+   }     
+}, generateRandomDelay());
+ });
+};
+
+const processPayment = (responseArray) => {
+  const order = responseArray[0];
+  const total = responseArray[1];
+  return new Promise ((resolve, reject) => {
+   setTimeout(()=> {  
+   let hasEnoughMoney = order.giftcardBalance >= total;
+   // For simplicity we've omited a lot of functionality
+   // If we were making more realistic code, we would want to update the giftcardBalance and the inventory
+   if (hasEnoughMoney) {
+     console.log(`Payment processed with giftcard. Generating shipping label.`);
+     let trackingNum = generateTrackingNumber();
+     resolve([order, trackingNum]);
+   } else {
+     reject(`Cannot process order: giftcard balance was insufficient.`);
+   }
+   
+}, generateRandomDelay());
+ });
+};
+
+
+const shipOrder = (responseArray) => {
+  const order = responseArray[0];
+  const trackingNum = responseArray[1];
+  return new Promise ((resolve, reject) => {
+   setTimeout(()=> {  
+     resolve(`The order has been shipped. The tracking number is: ${trackingNum}.`);
+}, generateRandomDelay());
+ });
+};
+
+
+// This function generates a random number to serve as a "tracking number" on the shipping label. In real life this wouldn't be a random number
+function generateTrackingNumber() {
+  return Math.floor(Math.random() * 1000000);
+}
+
+// This function generates a random number to serve as delay in a setTimeout() since real asynchrnous operations take variable amounts of time
+function generateRandomDelay() {
+  return Math.floor(Math.random() * 2000);
+}
+
+module.exports = {checkInventory, processPayment, shipOrder};
+```
+
+**Answer**
+```js
+const {checkInventory, processPayment, shipOrder} = require('./library.js');
+
+const order = {
+  items: [['sunglasses', 1], ['bags', 2]],
+  giftcardBalance: 79.82
+};
+
+checkInventory(order)
+.then((resolvedValueArray) => {
+  // Write the correct return statement here:
+  return processPayment(resolvedValueArray)
+})
+.then((resolvedValueArray) => {
+  // Write the correct return statement here:
+  return shipOrder(resolvedValueArray)
+})
+.then((successMessage) => {
+  console.log(successMessage);
+})
+.catch((errorMessage) => {
+  console.log(errorMessage);
+});
+```
+
+**Result**
+```
+$ node app.js
+All of the items are in stock. The total cost of the order is 35.97.
+Payment processed with giftcard. Generating shipping label.
+The order has been shipped. The tracking number is: 816628.
+$ 
+```
