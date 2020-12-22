@@ -424,12 +424,32 @@ We're sorry. Your order could not be completed because some items are sold out.
 $ 
 ```
 
-#
+# Chaining Multiple Promises
+One common pattern we’ll see with asynchronous programming is multiple operations which depend on each other to execute or that must be executed in a certain order. We might make one request to a database and use the data returned to us to make another request and so on! Let’s illustrate this with another cleaning example, washing clothes:
 
+We take our dirty clothes and put them in the washing machine. If the clothes are cleaned, then we’ll want to put them in the dryer. After the dryer runs, if the clothes are dry, then we can fold them and put them away.
 
+This process of chaining promises together is called composition. Promises are designed with composition in mind! Here’s a simple promise chain in code:
+```js
+firstPromiseFunction()
+.then((firstResolveVal) => {
+  return secondPromiseFunction(firstResolveVal);
+})
+.then((secondResolveVal) => {
+  console.log(secondResolveVal);
+});
+```
 
+Let’s break down what’s happening in the example:
+- We invoke a function `firstPromiseFunction()` which returns a promise.
+- We invoke `.then()` with an anonymous function as the success handler.
+- Inside the success handler we return a new promise— the result of invoking a second function, `secondPromiseFunction()` with the first promise’s resolved value.
+- We invoke a second `.then()` to handle the logic for the second promise settling.
+- Inside that `.then()`, we have a success handler which will log the second promise’s resolved value to the console.
 
+In order for our chain to work properly, we had to return the promise `secondPromiseFunction(firstResolveVal)`. This ensured that the return value of the first `.then()` was our second promise rather than the default return of a new promise with the same settled value as the initial.
 
+Let’s write some promise chains!
 
 **Instructions**
 1. Take a look at the provided code. We require in three functions: checkInventory(), processPayment(), shipOrder(). These functions each return a promise.
@@ -568,3 +588,344 @@ Payment processed with giftcard. Generating shipping label.
 The order has been shipped. The tracking number is: 816628.
 $ 
 ```
+
+# Avoiding Common Mistakes
+Promise composition allows for much more readable code than the nested callback syntax that preceded it. However, it can still be easy to make mistakes. In this exercise, we’ll go over two common mistakes with promise composition.
+
+**Mistake 1: Nesting promises instead of chaining them.**
+```js
+returnsFirstPromise()
+.then((firstResolveVal) => {
+  return returnsSecondValue(firstResolveVal)
+    .then((secondResolveVal) => {
+      console.log(secondResolveVal);
+    })
+})
+```
+Let’s break down what’s happening in the above code:
+- We invoke `returnsFirstPromise()` which returns a promise.
+- We invoke `.then()` with a success handler.
+- Inside the success handler, we invoke `returnsSecondValue()` with `firstResolveVal` which will return a new promise.
+- We invoke a second `.then()` to handle the logic for the second promise settling all inside the first then()!
+- Inside that second `.then()`, we have a success handler which will log the second promise’s resolved value to the console.
+
+Instead of having a clean chain of promises, we’ve nested the logic for one inside the logic of the other. Imagine if we were handling five or ten promises!
+
+**Mistake 2: Forgetting to `return` a promise.**
+```js
+returnsFirstPromise()
+.then((firstResolveVal) => {
+  returnsSecondValue(firstResolveVal)
+})
+.then((someVal) => {
+  console.log(someVal);
+})
+```
+Let’s break down what’s happening in the example:
+- We invoke `returnsFirstPromise()` which returns a promise.
+- We invoke `.then()` with a success handler.
+- Inside the success handler, we create our second promise, but we forget to return it!
+- We invoke a second `.then()`. It’s supposed to handle the logic for the second promise, but since we didn’t return, this `.then()` is invoked on a promise with the same settled value as the original promise!
+
+Since forgetting to return our promise won’t throw an error, this can be a really tricky thing to debug!
+
+
+**Instructions**
+1. The code in app.js works correctly, but it doesn’t follow best practices.
+
+Type node app.js in the terminal and hit enter, so you can see what the program outputs.
+
+2. Refactor, or rewrite, the code to avoid the two common mistakes: nesting and forgetting to return properly.
+
+**Hint**
+
+To use best practices, we can refactor this code:
+```js
+returnsFirstPromise()
+.then((firstResolveVal) => {
+  returnsSecondValue(firstResolveVal);
+    .then((secondResolveVal) => {
+      console.log(secondResolveVal);
+    });
+});
+```
+Into this code:
+```js
+returnsFirstPromise()
+.then((firstResolveVal) => {
+  return returnsSecondValue(firstResolveVal);
+})
+.then((someVal) => {
+  console.log(someVal);
+});
+```
+
+3. Type node app.js in the terminal and hit enter to make sure your program is still working as expected.
+
+**library.js**
+```js
+const store = {
+  sunglasses: {
+    inventory: 817, 
+    cost: 9.99
+  },
+  pants: {
+    inventory: 236, 
+    cost: 7.99
+  },
+  bags: {
+    inventory: 17, 
+    cost: 12.99
+  }
+};
+
+const checkInventory = (order) => {
+  return new Promise ((resolve, reject) => {
+   setTimeout(()=> {  
+   const itemsArr = order.items;  
+   let inStock = itemsArr.every(item => store[item[0]].inventory >= item[1]);
+   
+   if (inStock){
+     let total = 0;   
+     itemsArr.forEach(item => {
+       total += item[1] * store[item[0]].cost
+     });
+     console.log(`All of the items are in stock. The total cost of the order is ${total}.`);
+     resolve([order, total]);
+   } else {
+     reject(`The order could not be completed because some items are sold out.`);
+   }     
+}, generateRandomDelay());
+ });
+};
+
+const processPayment = (responseArray) => {
+  const order = responseArray[0];
+  const total = responseArray[1];
+  return new Promise ((resolve, reject) => {
+   setTimeout(()=> {  
+   let hasEnoughMoney = order.giftcardBalance >= total;
+   // For simplicity we've omited a lot of functionality
+   // If we were making more realistic code, we would want to update the giftcardBalance and the inventory
+   if (hasEnoughMoney) {
+     console.log(`Payment processed with giftcard. Generating shipping label.`);
+     let trackingNum = generateTrackingNumber();
+     resolve([order, trackingNum]);
+   } else {
+     reject(`Cannot process order: giftcard balance was insufficient.`);
+   }
+   
+}, generateRandomDelay());
+ });
+};
+
+
+const shipOrder = (responseArray) => {
+  const order = responseArray[0];
+  const trackingNum = responseArray[1];
+  return new Promise ((resolve, reject) => {
+   setTimeout(()=> {  
+     resolve(`The order has been shipped. The tracking number is: ${trackingNum}.`);
+}, generateRandomDelay());
+ });
+};
+
+
+// This function generates a random number to serve as a "tracking number" on the shipping label. In real life this wouldn't be a random number
+function generateTrackingNumber() {
+  return Math.floor(Math.random() * 1000000);
+}
+
+// This function generates a random number to serve as delay in a setTimeout() since real asynchrnous operations take variable amounts of time
+function generateRandomDelay() {
+  return Math.floor(Math.random() * 2000);
+}
+
+module.exports = {checkInventory, processPayment, shipOrder};
+```
+
+**Answer**
+```js
+const {checkInventory, processPayment, shipOrder} = require('./library.js');
+
+const order = {
+  items: [['sunglasses', 1], ['bags', 2]],
+  giftcardBalance: 79.82
+};
+
+// Refactor the code below:
+
+checkInventory(order)
+    .then((resolvedValueArray) => {
+        return processPayment(resolvedValueArray);
+    })
+    .then((resolvedValueArray) => {
+        return shipOrder(resolvedValueArray);
+    })
+    .then((successMessage) => {
+        console.log(successMessage);
+    });
+```
+
+**Result**
+```
+$ node app.js
+All of the items are in stock. The total cost of the order is 35.97.
+Payment processed with giftcard. Generating shipping label.
+The order has been shipped. The tracking number is: 624075.
+$ node app.js
+All of the items are in stock. The total cost of the order is 35.97.
+Payment processed with giftcard. Generating shipping label.
+The order has been shipped. The tracking number is: 466582.
+```
+
+# Using Promise.all()
+When done correctly, promise composition is a great way to handle situations where asynchronous operations depend on each other or execution order matters. What if we’re dealing with multiple promises, but we don’t care about the order? Let’s think in terms of cleaning again.
+
+For us to consider our house clean, we need our clothes to dry, our trash bins emptied, and the dishwasher to run. We need **all** of these tasks to complete but not in any particular order. Furthermore, since they’re all getting done asynchronously, they should really all be happening at the same time!
+
+To maximize efficiency we should use concurrency, multiple asynchronous operations happening together. With promises, we can do this with the function `Promise.all()`.
+
+`Promise.all()` accepts an array of promises as its argument and returns a single promise. That single promise will settle in one of two ways:
+- If every promise in the argument array resolves, the single promise returned from `Promise.all()` will resolve with an array containing the resolve value from each promise in the argument array.
+- If any promise from the argument array rejects, the single promise returned from `Promise.all()` will immediately reject with the reason that promise rejected. This behavior is sometimes referred to as failing fast.
+
+Let’s look at a code example:
+```js
+let myPromises = Promise.all([returnsPromOne(), returnsPromTwo(), returnsPromThree()]);
+ 
+myPromises
+  .then((arrayOfValues) => {
+    console.log(arrayOfValues);
+  })
+  .catch((rejectionReason) => {
+    console.log(rejectionReason);
+  });
+```
+
+Let’s break down what’s happening:
+- We declare myPromises assigned to invoking Promise.all().
+- We invoke Promise.all() with an array of three promises— the returned values from functions.
+- We invoke .then() with a success handler which will print the array of resolved values if each promise resolves successfully.
+- We invoke .catch() with a failure handler which will print the first rejection message if any promise rejects.
+
+**Instructions**
+1. Our business is doing so well that we’re running low on inventory. We want to reach out to some distributors to see if they have the items we need. We only want to make one restocking order, so we’ll only want to place the order if all of the items are available.
+
+Take a look at the provided code. We require in one function: checkAvailability().
+
+checkAvailability() expects two string arguments: an item and a distributor. It returns a promise. The function simulates checking that the given distributor has a given item. 80% of the time it will resolve the promise with the item, and 20% of the time it will reject the promise with an error message stating that the item isn’t available.
+
+We also provided two functions which will serve as success and failure handlers.
+
+If you’d like, look at the library.js file to see how these functions work. Press “Check Work” when you’re ready to move on to the next checkpoint.
+
+2. Create three variables each assigned to a separate promise:
+
+- checkSunglasses should be assigned the value returned from invoking checkAvailability() with 'sunglasses' as its first argument and 'Favorite Supply Co.' as its second argument.
+- checkPants should be assigned the value returned from invoking checkAvailability() with 'pants' as its first argument and 'Favorite Supply Co.' as its second argument.
+- checkBags should be assigned the value returned from invoking checkAvailability() with 'bags' as its first argument and 'Favorite Supply Co.' as its second argument.
+
+3. Invoke Promise.all() with an array containing checkSunglasses, checkPants, and checkBags.
+
+**Hint**
+
+It can sometimes be helpful to break things into additional steps. If you wanted, you could create a variable to hold your array of promises, and then pass that into Promise.all():
+```js
+const firstPromise = returnsPromOne();
+const secondPromise =  returnsPromTwo();
+const thirdPromise =  returnsPromThree();
+ 
+const promiseArray = [firstPromise, secondPromise, thirdPromise];
+ 
+Promise.all(promiseArray);
+```
+
+4. Chain a .then() to the promise returned from Promise.all(). You should pass in onFulfill to serve as the success handler.
+
+5. Add a .catch() to the chain. You should pass in onReject to serve as the failure handler.
+
+6. Type node app.js in the terminal and hit enter to execute your program.
+
+**library.js**
+```js
+const checkAvailability = (itemName, distributorName) => {
+    console.log(`Checking availability of ${itemName} at ${distributorName}...`);
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (restockSuccess()) {
+                console.log(`${itemName} are in stock at ${distributorName}`)
+                resolve(itemName);
+            } else {
+                reject(`Error: ${itemName} is unavailable from ${distributorName} at this time.`);
+            }
+        }, 1000);
+    });
+};
+
+module.exports = { checkAvailability };
+
+
+// This is a function that returns true 80% of the time
+// We're using it to simulate a request to the distributor being successful this often
+function restockSuccess() {
+    return (Math.random() > .2);
+}
+```
+
+**Answer**
+```js
+const {checkAvailability} = require('./library.js');
+
+const onFulfill = (itemsArray) => {
+  console.log(`Items checked: ${itemsArray}`);
+  console.log(`Every item was available from the distributor. Placing order now.`);
+};
+
+const onReject = (rejectionReason) => {
+	console.log(rejectionReason);
+};
+
+// Write your code below:
+const checkSunglasses = checkAvailability('sunglasses', 'Favorite Supply Co.')
+
+const checkPants = checkAvailability('pants', 'Favorite Supply Co.')
+
+const checkBags = checkAvailability('bags', 'Favorite Supply Co.')
+
+const promiseArray = [checkSunglasses, checkPants, checkBags]
+
+Promise.all(promiseArray)
+  .then(onFulfill)
+  .catch(onReject)
+```
+
+**Result**
+```
+$ node app.js
+Checking availability of sunglasses at Favorite Supply Co....
+Checking availability of pants at Favorite Supply Co....
+Checking availability of bags at Favorite Supply Co....
+sunglasses are in stock at Favorite Supply Co.
+pants are in stock at Favorite Supply Co.
+bags are in stock at Favorite Supply Co.
+Items checked: sunglasses,pants,bags
+Every item was available from the distributor. Placing order now.
+$ 
+```
+
+# Review
+Awesome job! Promises are a difficult concept even for experienced developers, so pat yourself on the back. You’ve learned a ton about asynchronous JavaScript and promises. 
+
+Let’s review:
+- Promises are JavaScript objects that represent the eventual result of an asynchronous operation.
+- Promises can be in one of three states: pending, resolved, or rejected.
+- A promise is settled if it is either resolved or rejected.
+- We construct a promise by using the `new` keyword and passing an executor function to the `Promise` constructor method.
+- `setTimeout()` is a Node function which delays the execution of a callback function using the event-loop.
+- We use `.then()` with a success handler callback containing the logic for what should happen if a promise resolves.
+- We use `.catch()` with a failure handler callback containing the logic for what should happen if a promise rejects.
+- Promise composition enables us to write complex, asynchronous code that’s still readable. We do this by chaining multiple `.then()`‘s and `.catch()`‘s.
+- To use promise composition correctly, we have to remember to `return` promises constructed within a `.then()`.
+- We should chain multiple promises rather than nesting them.
+- To take advantage of concurrency, we can use `Promise.all()`.
