@@ -22,4 +22,12 @@ You’ll see JSON being displayed on the page. JSON, JavaScript Object Notation,
 Go to the next exercise to learn more about requests.
 
 **Result**
+
 ![request1_page1](img/codecademy-requests1.png)
+
+# HTTP Requests
+
+
+
+
+
