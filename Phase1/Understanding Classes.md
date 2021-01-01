@@ -74,3 +74,120 @@ __proto__:
   ▶ constructor: class Hero
   ▶ greet: ƒ greet()
 ```
+
+We can see in the output that the constructor() and greet() functions were applied to the __proto__, or [[Prototype]] of hero1, and not directly as a method on the hero1 object. While this is clear when making constructor functions, it is not obvious while creating classes. Classes allow for a more simple and succinct syntax, but sacrifice some clarity in the process.
+
+# Extending a Class
+An advantageous feature of constructor functions and classes is that they can be extended into new object blueprints based off the parent. This prevents repetition of code for objects that are similar but need some additional or more specific features.
+
+New constructor functions can be created from the parent using the call method. In the example below, we will create a more specific character class called Mage, and assign the properties of Hero to it using call(), as well as adding an additional property.
+
+We will also set the Mage's prototype to the one of Hero. Thus, Mage will inherit the methods of the Hero's prototype.
+
+```js
+// Creating a new constructor from the parent
+function Mage(name, level, spell) {
+  // Chain constructor with call
+  Hero.call(this, name, level)
+
+  this.spell = spell
+}
+
+// Creating a new object using Hero's prototype as the prototype for the newly created object.
+Mage.prototype = Object.create(Hero.prototype)
+```
+
+Now we can create a new instance of Mage using the same properties as Hero as well as a new one we added.
+```js
+const hero2 = new Mage('Lejon', 2, 'Magic Missile')
+```
+
+Sending hero2 to the console, we can see we have created a new Mage based off the constructor.
+```
+Mage {name: "Lejon", level: 2, spell: "Magic Missile"}
+__proto__:
+    ▶ constructor: ƒ Mage(name, level, spell)
+```
+
+With ES6 classes, the super keyword is used in place of call to access the parent functions. We will use extends to refer to the parent class.
+
+```js
+// Creating a new class from the parent
+class Mage extends Hero {
+  constructor(name, level, spell) {
+    // Chain constructor with super
+    super(name, level)
+
+    // Add a new property
+    this.spell = spell
+  }
+}
+```
+
+Now we can create a new Mage instance in the same manner.
+```js
+const hero2 = new Mage('Lejon', 2, 'Magic Missile')
+```
+
+We will print hero2 to the console and view the output.
+```
+Mage {name: "Lejon", level: 2, spell: "Magic Missile"}
+__proto__: Hero
+    ▶ constructor: class Mage
+```
+The output is nearly exact the same, except in the case of classes the [[Prototype]] is linked to the parent, in this case Hero.
+
+Below is a side-by-side comparison of the entire process of initialization, adding methods, and inheritance of a constructor function and a class.
+
+constructor.js
+```js
+function Hero(name, level) {
+  this.name = name
+  this.level = level
+}
+
+// Adding a method to the constructor
+Hero.prototype.greet = function () {
+  return `${this.name} says hello.`
+}
+
+// Creating a new constructor from the parent
+function Mage(name, level, spell) {
+  // Chain constructor with call
+  Hero.call(this, name, level)
+
+  this.spell = spell
+}
+
+// Creating a new object using Hero's prototype as the prototype for the newly created object.
+Mage.prototype = Object.create(Hero.prototype)
+```
+
+class.js
+```js
+// Initializing a class
+class Hero {
+  constructor(name, level) {
+    this.name = name
+    this.level = level
+  }
+
+  // Adding a method to the constructor
+  greet() {
+    return `${this.name} says hello.`
+  }
+}
+
+// Creating a new class from the parent
+class Mage extends Hero {
+  constructor(name, level, spell) {
+    // Chain constructor with super
+    super(name, level)
+
+    // Add a new property
+    this.spell = spell
+  }
+}
+```
+
+Although the syntax is quite different, the underlying result is nearly the same between both methods. Classes give us an easier, more concise way of creating object blueprints, and constructor functions describe more accurately what is happening under the hood.
