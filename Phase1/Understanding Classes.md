@@ -1,3 +1,5 @@
+Source : https://www.taniarascia.com/understanding-classes-in-javascript/
+
 # Introduction
 In Understanding Prototypes and Inheritance in JavaScript, we learned how JavaScript is a prototype-based language, and every object in JavaScript has a hidden internal property called [[Prototype]] that can be used to extend object properties and methods.
 
