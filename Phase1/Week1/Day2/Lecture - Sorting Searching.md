@@ -1,9 +1,13 @@
 # Sorting
 - Untuk mempermudah jika ingin menghilangkan duplikasi/data yang tidak diperlukan
+- bisa pake teknik splice-ing
+- atau swap juga bisa
 
 ## insertion sort
 
 ```
+....
+
 9
     1 5 7 8 9 3
             ^
@@ -44,12 +48,13 @@ result = [2, 33, 52, 73, 106]
 ```
 
 # Search :
-cs.usfca.edu/~galles/visualization/Search.html
+https://www.cs.usfca.edu/~galles/visualization/Search.html
 
 ## linear search
 -> ngeloop sampai ketemu, kalo ketemu return. kalo gaketemu return -1
 
 ## binary search
+-> harus di sorting dulu
 -> sistem choping
 
 ```
@@ -83,5 +88,13 @@ Nilai tengah = 23
 
 Apakah 23 === 23 ? Yes.
 
-Return position
+return position
 ```
+
+Misal datanya :
+1 2 3 4 .... 1000000
+
+2 => linear => 2 x loop aja udah ketemu. prosesnya lebih cepet => best case scenario
+     binary => lebih dari 10 kali loop. berat
+
+999999 => linear => worst case scenario
