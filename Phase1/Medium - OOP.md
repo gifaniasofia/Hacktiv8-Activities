@@ -60,17 +60,17 @@ Di dalam kelas ada beberapa attribut penting di dalamnya yaitu:
 - Inheritance
 
 1. Constuctor
-Adalah sebuah method/function yang di jalankan pertama kali ketika object di buat. Misalnya seperti contoh kode di atas ketika const = new Car('suv', 'red') di jalankan maka method constructor langsung di jalankan juga, yang isinya adalah memasukkan parameter suv dan red ke dalam property car this.type dan this.color .
+Adalah sebuah method/function yang di jalankan pertama kali ketika object di buat. Misalnya seperti contoh kode di atas ketika `const car = new Car('suv', 'red')` di jalankan maka method `constructor` langsung di jalankan juga, yang isinya adalah memasukkan parameter `suv` dan `red` ke dalam property car `this.type` dan `this.color` .
 2. Property
-Adalah data yang di simpan di dalam sebuah object. Pada contoh di atas adalah this.type dan this.color , property dapat diakses di class method manapun yang ada di dalam object. Di atas saya memasukkan string on ke dalam this.engineStatus di dalam method engineStart()
+Adalah data yang di simpan di dalam sebuah object. Pada contoh di atas adalah `this.type` dan `this.color` , property dapat diakses di class method manapun yang ada di dalam object. Di atas saya memasukkan string `on` ke dalam `this.engineStatus` di dalam method `engineStart()`
 3. Class Method
-Adalah method/function yang ada di dalam sebuah object, dan untuk menggunakannya class harus di instance terlebih dahulu menjadi object baru bisa dijalankan. Contoh class mobil di atas, kita akan menggunakan method engineStart .
+Adalah method/function yang ada di dalam sebuah object, dan untuk menggunakannya class harus di instance terlebih dahulu menjadi object baru bisa dijalankan. Contoh class mobil di atas, kita akan menggunakan method `engineStart` .
 ```js
 const car = new Car('suv', 'red')
 car.engineStart()
 ```
 4. Static Method
-Adalah method yang sama seperti class method, tetapi untuk menjalankannya tidak perlu meng instance class, cukup menggunakan NamaClass.namaMehod()
+Adalah method yang sama seperti class method, tetapi untuk menjalankannya tidak perlu meng instance class, cukup menggunakan `NamaClass.namaMehod()`
 ```js
 const car = new Car('suv', 'red)
 Car.isEngineOn(car) // Engine Off
