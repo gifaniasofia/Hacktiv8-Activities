@@ -1,0 +1,1 @@
+gambar codecademy SQL
