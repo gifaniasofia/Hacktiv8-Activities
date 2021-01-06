@@ -20,3 +20,5 @@ You will run all of your SQL commands in this course by pressing the Run button 
 ```sql
 SELECT * FROM celebs;
 ```
+
+![p1](img/manipulation-p1.png)
