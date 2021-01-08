@@ -1,15 +1,3 @@
-# OOP - Composition
-
-
-# OOP - Aggregation
-
-
-# Pattern - Factory
-  - Static Method
-
-
-
-
 - instanciate -> new
 
 - inheritance : terjadi hubungan org tua dan anaknya
