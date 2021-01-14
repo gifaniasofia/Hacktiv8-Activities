@@ -19,7 +19,7 @@ PK ID itu sellau autoincrement
 - Si People punya beberapa koleksi game
 - Employees dan Projects -> si employee punya banyak project yg dia handle
 
-![one to many]("one to many.jpg" "ERD-one to many")
+![one to many](one to many.jpg "ERD-one to many")
 
 3. Many to Many
 - Contoh: gameName sama genre itu kan bisa duplikat, jd dibuat table baru
@@ -28,6 +28,6 @@ Yang mana table penengah akan merefer ke table people dan table game, melalui fo
 - Contoh Employees dan Projects, dimana employee bisa punya banyak projects, dan projects bisa dikerjain banyak employees.
 Junction table -> PeopleProjects
 
-![many to many-1](many to many.jpg "ERD-many to many")
-![many to many-2](many to many2.jpg "ERD-many to many")
-![many to many-3](many to many3.jpg "ERD-many to many")
+![many to many-1](many-to-many.jpg "ERD-many to many")
+![many to many-2](many-to-many2.jpg "ERD-many to many")
+![many to many-3](many-to-many3.jpg "ERD-many to many")
