@@ -3,8 +3,10 @@
 - Eliminasi redudancy (datanya duplikat di berbagai tempat)
 - Makes data easily accessible across platform(s)/app(s)
 
-Nama table -> jamak
-PK ID itu sellau autoincrement
+**Notes**
+- Nama table -> jamak
+- PK ID itu sellau autoincrement
+- FK itu selalu PK dari table lain (PascalCase)
 
 # Relasi database
 1. One to One -> a couple. Sebuah pasangan. Si a punya si b, si b punya si a. Dia gapunya hubungan dengan table lain
