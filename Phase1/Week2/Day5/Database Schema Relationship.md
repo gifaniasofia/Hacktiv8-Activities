@@ -19,7 +19,7 @@ PK ID itu sellau autoincrement
 - Si People punya beberapa koleksi game
 - Employees dan Projects -> si employee punya banyak project yg dia handle
 
-![one to many](one to many.jpg "ERD-one to many")
+![one to many]("one to many.jpg" "ERD-one to many")
 
 3. Many to Many
 - Contoh: gameName sama genre itu kan bisa duplikat, jd dibuat table baru
