@@ -1,4 +1,5 @@
-Step-step :
+# Step-step :
+
 1. Install node-postgres di folder project.
 ```
 $ npm init -y
@@ -240,4 +241,100 @@ DAN DI setup.js HARUS ADA DUA QUERY ITU!!!!
 > \dt ---> list table
 > \d "Politicians" ---> masuk ke table. ini pake "" karena dia capital di awal. kalo kecil semua gausah
 > select * form "Politicians" ---> buat check apakah isinya udah bener di table politicians?
+```
+
+Contoh nyekrip sql di javascript biar munculnya di terminal:
+
+```js
+const client = require('./config/config.js');
+
+const query1 = `
+  SELECT name, party, grade_current
+  FROM "Politicians"
+  WHERE party = 'R'
+    AND grade_current BETWEEN 9 AND 11
+  ORDER BY grade_current;
+`
+
+const query2 = `
+  SELECT COUNT(*) AS totalVote, politicians.name
+  FROM "Politicians" AS politicians
+  JOIN "Votes" AS votes
+    ON politicians.id = votes.politician_id
+  GROUP BY politicians.name
+  HAVING politicians.name = 'Olympia Snowe';
+`
+
+const query3 = `
+  SELECT politicians.name, COUNT(*) AS totalVote
+  FROM "Politicians" AS politicians
+  JOIN "Votes" AS votes
+    ON politicians.id = votes.politician_id
+  WHERE politicians.name LIKE '%Adam%'
+  GROUP BY politicians.name;
+`
+
+const query4 = `
+  SELECT COUNT(*) AS totalVote, politicians.name, politicians.party, politicians.location
+  FROM "Politicians" AS politicians
+  JOIN "Votes" AS votes
+    ON politicians.id = votes.politician_id
+  GROUP BY politicians.name, politicians.party, politicians.location
+  ORDER BY totalVote DESC
+  LIMIT 3;
+`
+
+const query5 = `
+  SELECT first_name, last_name, gender, age
+  FROM "Voters" AS voters
+  JOIN
+      (SELECT *
+      FROM "Politicians" AS politicians
+      JOIN "Votes" AS votes
+        ON politicians.id = votes.politician_id
+      WHERE politicians.name = 'Olympia Snowe') AS politicians_votes
+    ON voters.id = politicians_votes.voter_id;
+`
+
+client.query(query1, (err, result1) => {
+  if (err) {
+    console.log('Error 1: ', err);
+  } else {
+    console.log(result1.rows);
+
+    client.query(query2, (err, result2) => {
+      if (err) {
+        console.log('Error 2: ', err);
+      } else {
+        console.log(result2.rows);
+
+        client.query(query3, (err, result3) => {
+          if (err) {
+            console.log('Error 3: ', err);
+          } else {
+            console.log(result3.rows);
+
+            client.query(query4, (err, result4) => {
+              if (err) {
+                console.log('Error 4: ', err);
+              } else {
+                console.log(result4.rows);
+
+                client.query(query5, (err, result5) => {
+                  if (err) {
+                    console.log('Error 5: ', err);
+                  } else {
+                    console.log(result5.rows);
+
+                    client.end();
+                  }
+                })
+              }
+            })
+          }
+        })
+      }
+    })
+  }
+})
 ```
