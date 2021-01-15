@@ -17,3 +17,5 @@ In the editor, type the following:
 SELECT * FROM movies;
 ```
 What are the column names?
+
+![p1](img/Queries-p1.jpg)
