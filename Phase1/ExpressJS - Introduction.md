@@ -134,3 +134,24 @@ app.listen(3000, function() {
   res.send('Server listening on port 3000')
 })
 ```
+
+**Route handler part-by-part**
+
+A callback function that handle "/article/:id" request. The function accepts 2 argument which request(req) and response(res). The body function can be anything and should return the response to the client.
+
+# Wrap it up
+Since Express.js is a "Server Side Javascript" it should be able binded and listen the incoming request from the client side. It can be done by adding line simple line "app.listen(PORT)" which binds and listens for connections on the specified host and port.
+```js
+const express = require('express')
+const app = express()
+
+app.get('/article/:id', function (req, res) {
+  const id = req.params.id
+  const toLower = id.toLowerCase()
+  res.send(id)
+})
+
+app.listen(3000)
+```
+
+app.listen() is method returns an http.Server object and it tells to run the server with given port to listen. Unless the port is given, the operating system will assign an arbitrary unused port.
