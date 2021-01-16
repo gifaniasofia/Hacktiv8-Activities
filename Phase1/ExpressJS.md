@@ -68,3 +68,40 @@ app.listen(3000, function() {
 
 # Route Method
 A route method is derived from one of the HTTP methods, and is attached to an instance of the express class.
+
+Commonly used methods.
+- GET : Used to **read** (or retrieve) a representation of a resource.
+- POST : is most-often utilized to **create** new resources
+- PUT : is most-often utilized for **update** capabilities, PUT-ing to a known resource URl with the request body containing the newly-updated representation of the original resource
+- DELETE : is used to **delete** a resource identified by a URl
+
+# Route Path
+Route path is a endpoint definition at which request can be made. Route path can be string, string pattern or even regular expressions.
+
+Example:
+
+Route path that match "/contact" request
+```js
+const express = require('express')
+const app = express()
+
+app.get('/contact', function(req, res) {
+  res.send('GET method Hello World')
+})
+
+app.listen(3000, function() {
+  res.send('Server listening on port 3000')
+})
+```
+
+Other examples :
+- `'/about*'` : This route path will match about_me, about-company, aboutus, and so on.
+- `/me/` : This route path will match anything with "me" in it's request path
+- `/.*fly$` : This route path will match anything ends with "fly" such as dragonfly but not dragonflyman
+
+# Route Dynamic Parameters
+Route parameters are named URl segments that are used to capture the values specified at their position in the URl. THe captured values are populated in the req.params object, with the name of the route parameter specified in the path as their respective keys.
+
+Example:
+
+Route path that match "/article/l" or "/article/lorem-ipsum" request
