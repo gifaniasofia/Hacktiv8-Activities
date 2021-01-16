@@ -45,9 +45,6 @@ https://expressjs.com/en/guide/using-template-engines.html
 
 https://ejs.co/
 
-
-
-
 # Routing
 - Routing refers to how an application's expoints(URls) respond to client requests.
 - In other words, the application "**listens**" for requests that match the specified routes(s) and method(s), and when it detects a match, it calls the specified callback function.
@@ -105,3 +102,35 @@ Route parameters are named URl segments that are used to capture the values spec
 Example:
 
 Route path that match "/article/l" or "/article/lorem-ipsum" request
+```js
+const express = require('express')
+const app = express()
+
+app.get('/article/:id', function(req, res) {
+  res.send(`Article detail ${req.params.id}`)
+})
+
+app.listen(3000, function() {
+  res.send('Server listening on port 3000')
+})
+```
+
+Other examples:
+![rdp](img/express-route-dynamic-examples.jpg)
+
+# Route Handler
+Handler is a callback function that executes when a matching request type is found on the relevant route. It can be can in the form of a function, an array of functions, or combinations of both.
+```js
+const express = require('express')
+const app = express()
+
+app.get('/article/:id', function (req, res) {
+  const id = req.params.id
+  const toLower = id.toLowerCase()
+  res.send(id)
+})
+
+app.listen(3000, function() {
+  res.send('Server listening on port 3000')
+})
+```
