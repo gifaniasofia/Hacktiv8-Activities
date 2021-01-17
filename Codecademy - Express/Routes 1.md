@@ -562,3 +562,527 @@ module.exports = {
 Express matches routes using both path and HTTP method verb. In the diagram to the right, we see a request with a PUT verb and /expressions (remember that the query is not part of the route path). The path for the first route matches, but the method verb is wrong, so the Express server will continue to the next registered route. This route matches both method and path, and so its callback is called, the necessary updating logic is executed, and the response is sent.
 
 ![p11](img/Route1-P11.jpg)
+
+# Creating An Expression
+POST is the HTTP method verb used for creating new resources. Because POST routes create new data, their paths do not end with a route parameter, but instead end with the type of resource to be created.
+
+For example, to create a new monster, a client would make a POST request to /monsters. The client does not know the id of the monster until it is created and sent back by the server, therefore POST /monsters/:id doesn’t make sense because a client couldn’t know the unique id of a monster before it exists.
+
+Express uses .post() as its method for POST requests. POST requests can use many ways of sending data to create new resources, including query strings.
+
+The HTTP status code for a newly-created resource is 201 Created.
+
+**Instructions**
+1. Create a POST /expressions route. It should send create and add a new expression to the expressions array if it is a valid new expression (meaning it has an emoji and name key). It should send back the new element with a 201 status code if it is valid, and it should send a 400 status code if the object is not valid.
+
+You can use the createElement(elementType, objectToCreate) helper function to create a valid expression. The first argument is the type of element, so it should be 'expressions' in this case. The second argument should be the query object with an emoji and a name property. This function will return false if the objectToCreate does not contain all necessary key-value pairs, and it will return the newly-created element if object to create is valid. It does not add the created element to any arrays, you will need to do so yourself.
+
+Don’t forget to restart your server and test as you implement the functionality. To test your route, use the POST tab in the upper left corner. Select a name and emoji and send the request to see if your route works as intended.
+
+**Hint**
+
+You can use the .push() method of the expressions array to add a new element after it has been created, for example:
+```js
+const newElement = createElement('emoji', {name: 'example', emoji: ':)'});
+if (newElement) {
+  elements.push(newElement);
+}
+```
+
+**Answer**
+```js
+const express = require('express');
+const app = express();
+
+// Serves Express Yourself website
+app.use(express.static('public'));
+
+const { getElementById, getIndexById, updateElement,
+        seedElements, createElement } = require('./utils');
+
+const expressions = [];
+seedElements(expressions, 'expressions');
+
+const PORT = process.env.PORT || 4001;
+// Use static server to serve the Express Yourself Website
+app.use(express.static('public'));
+
+app.get('/expressions', (req, res, next) => {
+  res.send(expressions);
+});
+
+app.get('/expressions/:id', (req, res, next) => {
+  const foundExpression = getElementById(req.params.id, expressions);
+  if (foundExpression) {
+    res.send(foundExpression);
+  } else {
+    res.status(404).send();
+  }
+});
+
+app.put('/expressions/:id', (req, res, next) => {
+  const expressionIndex = getIndexById(req.params.id, expressions);
+  if (expressionIndex !== -1) {
+    updateElement(req.params.id, req.query, expressions);
+    res.send(expressions[expressionIndex]);
+  } else {
+    res.status(404).send();
+  }
+});
+
+app.post('/expressions', (req, res, next) => {
+  const receivedExpression = createElement('expressions', req.query);
+  if (receivedExpression) {
+    expressions.push(receivedExpression);
+    res.status(201).send(receivedExpression);
+  } else {
+    res.status(400).send();
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
+});
+```
+
+**Utils.js**
+```js
+let expressionIdCounter = 0;
+let animalIdCounter = 0;
+
+const getElementById = (id, elementList) => {
+  return elementList.find((element) => {
+    return element.id === Number(id);
+  });
+};
+
+const getIndexById = (id, elementList) => {
+  return elementList.findIndex((element) => {
+    return element.id === Number(id);
+  });
+};
+
+const createElement = (elementType, queryArguments) => {
+  if (queryArguments.hasOwnProperty('emoji') &&
+      queryArguments.hasOwnProperty('name')) {
+    let currentId;
+    if (elementType === 'expressions') {
+      expressionIdCounter += 1;
+      currentId = expressionIdCounter;
+    } else {
+      animalIdCounter += 1;
+      currentId = animalIdCounter;
+    }
+    return {
+      'id':    currentId,
+      'emoji': queryArguments.emoji,
+      'name':  queryArguments.name,
+    };
+  } else {
+    return false;
+  }
+};
+
+const updateElement = (id, queryArguments, elementList) => {
+  const elementIndex = getIndexById(id, elementList);
+  if (elementIndex === -1) {
+    throw new Error('updateElement must be called with a valid id parameter');
+  }
+  if (queryArguments.id) {
+    queryArguments.id = Number(queryArguments.id);
+  }
+  Object.assign(elementList[elementIndex], queryArguments);
+  return elementList[elementIndex];
+};
+
+const seedElements = (arr, type) => {
+  if (type === 'expressions') {
+    arr.push(createElement('expressions', {'emoji': '😀', 'name': 'happy'}));
+    arr.push(createElement('expressions', {'emoji': '😎', 'name': 'shades'}));
+    arr.push(createElement('expressions', {'emoji': '😴', 'name': 'sleepy'}));
+  } else if (type === 'animals') {
+    arr.push(createElement('animals', {'emoji': '🐶', 'name': 'Pupper'}));
+    arr.push(createElement('animals', {'emoji': '🐍', 'name': 'Snek'}));
+    arr.push(createElement('animals', {'emoji': '🐱', 'name': 'Maru'}));
+  } else {
+    throw new Error(`seed type must be either 'expression' or 'animal'`);
+  }
+};
+
+module.exports = {
+  createElement: createElement,
+  getIndexById: getIndexById,
+  getElementById: getElementById,
+  updateElement: updateElement,
+  seedElements: seedElements,
+};
+```
+
+# Deleting Old Expressions
+DELETE is the HTTP method verb used to delete resources. Because DELETE routes delete currently existing data, their paths should usually end with a route parameter to indicate which resource to delete.
+
+Express uses .delete() as its method for DELETE requests.
+
+Servers often send a 204 No Content status code if deletion occurs without error.
+
+**Instructions**
+1. Create a DELETE /expressions/:id route. It should send back a 404 response for a request with an invalid id, and it should delete the proper element from the expressions array and send a 204 status with a valid id.
+
+To test your functionality, use the DELETE tab in the upper left. Select the ID to delete and send the request.
+
+**Hint**
+
+You can use getIndexById to find the index of the element to delete. getIndexById will return -1 for a non-existent ID, and the proper index if it exists. Then you can use the splice method to remove the element.
+
+**Answer**
+```js
+const express = require('express');
+const app = express();
+
+// Serves Express Yourself website
+app.use(express.static('public'));
+
+const { getElementById, getIndexById, updateElement,
+        seedElements, createElement } = require('./utils');
+
+const expressions = [];
+seedElements(expressions, 'expressions');
+const animals = [];
+seedElements(animals, 'animals');
+
+const PORT = process.env.PORT || 4001;
+// Use static server to serve the Express Yourself Website
+app.use(express.static('public'));
+
+app.get('/expressions', (req, res, next) => {
+  res.send(expressions);
+});
+
+app.get('/expressions/:id', (req, res, next) => {
+  const foundExpression = getElementById(req.params.id, expressions);
+  if (foundExpression) {
+    res.send(foundExpression);
+  } else {
+    res.status(404).send();
+  }
+});
+
+app.put('/expressions/:id', (req, res, next) => {
+  const expressionIndex = getIndexById(req.params.id, expressions);
+  if (expressionIndex !== -1) {
+    updateElement(req.params.id, req.query, expressions);
+    res.send(expressions[expressionIndex]);
+  } else {
+    res.status(404).send();
+  }
+});
+
+app.post('/expressions', (req, res, next) => {
+  const receivedExpression = createElement('expressions', req.query);
+  if (receivedExpression) {
+    expressions.push(receivedExpression);
+    res.status(201).send(receivedExpression);
+  } else {
+    res.status(400).send();
+  }
+});
+
+app.delete('/expressions/:id', (req, res, next) => {
+  const expressionIndex = getIndexById(req.params.id, expressions);
+  if (expressionIndex !== -1) {
+    expressions.splice(expressionIndex, 1);
+    res.status(204).send();
+  } else {
+    res.status(404).send();
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`); 
+});
+```
+
+**Utils.js**
+```js
+let expressionIdCounter = 0;
+let animalIdCounter = 0;
+
+const getElementById = (id, elementList) => {
+  return elementList.find((element) => {
+    return element.id === Number(id);
+  });
+};
+
+const getIndexById = (id, elementList) => {
+  return elementList.findIndex((element) => {
+    return element.id === Number(id);
+  });
+};
+
+const createElement = (elementType, queryArguments) => {
+  if (queryArguments.hasOwnProperty('emoji') &&
+      queryArguments.hasOwnProperty('name')) {
+    let currentId;
+    if (elementType === 'expressions') {
+      expressionIdCounter += 1;
+      currentId = expressionIdCounter;
+    } else {
+      animalIdCounter += 1;
+      currentId = animalIdCounter;
+    }
+    return {
+      'id':    currentId,
+      'emoji': queryArguments.emoji,
+      'name':  queryArguments.name,
+    };
+  } else {
+    return false;
+  }
+};
+
+const updateElement = (id, queryArguments, elementList) => {
+  const elementIndex = getIndexById(id, elementList);
+  if (elementIndex === -1) {
+    throw new Error('updateElement must be called with a valid id parameter');
+  }
+  if (queryArguments.id) {
+    queryArguments.id = Number(queryArguments.id);
+  }
+  Object.assign(elementList[elementIndex], queryArguments);
+  return elementList[elementIndex];
+};
+
+const seedElements = (arr, type) => {
+  if (type === 'expressions') {
+    arr.push(createElement('expressions', {'emoji': '😀', 'name': 'happy'}));
+    arr.push(createElement('expressions', {'emoji': '😎', 'name': 'shades'}));
+    arr.push(createElement('expressions', {'emoji': '😴', 'name': 'sleepy'}));
+  } else if (type === 'animals') {
+    arr.push(createElement('animals', {'emoji': '🐶', 'name': 'Pupper'}));
+    arr.push(createElement('animals', {'emoji': '🐍', 'name': 'Snek'}));
+    arr.push(createElement('animals', {'emoji': '🐱', 'name': 'Maru'}));
+  } else {
+    throw new Error(`seed type must be either 'expression' or 'animal'`);
+  }
+};
+
+module.exports = {
+  createElement: createElement,
+  getIndexById: getIndexById,
+  getElementById: getElementById,
+  updateElement: updateElement,
+  seedElements: seedElements,
+};
+```
+
+# Adding Animals Routes
+Congratulations, you have made our glorious Express Yourself Machine fully operational! Not only that, you now have all the tools you need to create a basic CRUD API! Time to practice your skills with a new set of routes.
+
+You are going to add an additional set of functionality to our machine: Animal Mode! This will involve creating similar GET, POST, PUT, and DELETE routes.
+
+**Instructions**
+1. In your app.js file, Create a GET /animals route to return an array of all animals.
+
+2. Create a GET /animals/:id route to respond with a single animal.
+
+3. Create a PUT /animals/:id route to update an animal in animals and send back the updated animal.
+
+4. Create a POST /animals route to add new animals to the animals and respond with the new animal.
+
+5. Create a DELETE /animals/:id route to delete animals by ID.
+
+**Answer**
+```js
+const express = require('express');
+const app = express();
+
+const { getElementById, getIndexById, updateElement,
+  seedElements, createElement } = require('./utils');
+
+const PORT = process.env.PORT || 4001;
+// Use static server to serve the Express Yourself Website
+app.use(express.static('public'));
+
+const expressions = [];
+seedElements(expressions, 'expressions');
+const animals = [];
+seedElements(animals, 'animals');
+
+// Get all expressions
+app.get('/expressions', (req, res, next) => {
+  res.send(expressions);
+});
+
+// Get a single expression
+app.get('/expressions/:id', (req, res, next) => {
+  const foundExpression = getElementById(req.params.id, expressions);
+  if (foundExpression) {
+    res.send(foundExpression);
+  } else {
+    res.status(404).send();
+  }
+});
+
+// Update an expression
+app.put('/expressions/:id', (req, res, next) => {
+  const expressionIndex = getIndexById(req.params.id, expressions);
+  if (expressionIndex !== -1) {
+    updateElement(req.params.id, req.query, expressions);
+    res.send(expressions[expressionIndex]);
+  } else {
+    res.status(404).send();
+  }
+});
+
+// Create an expression
+app.post('/expressions', (req, res, next) => {
+  const receivedExpression = createElement('expressions', req.query);
+  if (receivedExpression) {
+    expressions.push(receivedExpression);
+    res.status(201).send(receivedExpression);
+  } else {
+    res.status(400).send();
+  }
+});
+
+// Delete an expression
+app.delete('/expressions/:id', (req, res, next) => {
+  const expressionIndex = getIndexById(req.params.id, expressions);
+  if (expressionIndex !== -1) {
+    expressions.splice(expressionIndex, 1);
+    res.status(204).send();
+  } else {
+    res.status(404).send();
+  }
+});
+
+// Get all animals
+app.get('/animals', (req, res, next) => {
+  res.send(animals);
+});
+
+// Get a single animal
+app.get('/animals/:id', (req, res, next) => {
+  const animal = getElementById(req.params.id, animals);
+  if (animal) {
+    res.send(animal);
+  } else {
+    res.status(404).send();
+  }
+});
+
+// Create an animal
+app.post('/animals', (req, res, next) => {
+  const receivedAnimal = createElement('animals', req.query);
+  if (receivedAnimal) {
+    animals.push(receivedAnimal);
+    res.status(201).send(receivedAnimal);
+  } else {
+    res.status(400).send();
+  }
+});
+
+// Update an animal
+app.put('/animals/:id', (req, res, next) => {
+  const animalIndex = getIndexById(req.params.id, animals);
+  if (animalIndex !== -1) {
+    updateElement(req.params.id, req.query, animals);
+    res.send(animals[animalIndex]);
+  } else {
+    res.status(404).send();
+  }
+});
+
+// Delete a single animal
+app.delete('/animals/:id', (req, res, next) => {
+  const animalIndex = getIndexById(req.params.id, animals);
+  if (animalIndex !== -1) {
+    animals.splice(animalIndex, 1);
+    res.status(204).send();
+  } else {
+    res.status(404).send();
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is listening on ${PORT}`);
+});
+```
+
+**Utils.js**
+```js
+let expressionIdCounter = 0;
+let animalIdCounter = 0;
+
+const getElementById = (id, elementList) => {
+  return elementList.find((element) => {
+    return element.id === Number(id);
+  });
+};
+
+const getIndexById = (id, elementList) => {
+  return elementList.findIndex((element) => {
+    return element.id === Number(id);
+  });
+};
+
+const createElement = (elementType, queryArguments) => {
+  if (queryArguments.hasOwnProperty('emoji') &&
+      queryArguments.hasOwnProperty('name')) {
+    let currentId;
+    if (elementType === 'expressions') {
+      expressionIdCounter += 1;
+      currentId = expressionIdCounter;
+    } else {
+      animalIdCounter += 1;
+      currentId = animalIdCounter;
+    }
+    return {
+      'id':    currentId,
+      'emoji': queryArguments.emoji,
+      'name':  queryArguments.name,
+    };
+  } else {
+    return false;
+  }
+};
+
+const updateElement = (id, queryArguments, elementList) => {
+  const elementIndex = getIndexById(id, elementList);
+  if (elementIndex === -1) {
+    throw new Error('updateElement must be called with a valid id parameter');
+  }
+  if (queryArguments.id) {
+    queryArguments.id = Number(queryArguments.id);
+  }
+  Object.assign(elementList[elementIndex], queryArguments);
+  return elementList[elementIndex];
+};
+
+const seedElements = (arr, type) => {
+  if (type === 'expressions') {
+    arr.push(createElement('expressions', {'emoji': '😀', 'name': 'happy'}));
+    arr.push(createElement('expressions', {'emoji': '😎', 'name': 'shades'}));
+    arr.push(createElement('expressions', {'emoji': '😴', 'name': 'sleepy'}));
+  } else if (type === 'animals') {
+    arr.push(createElement('animals', {'emoji': '🐶', 'name': 'Pupper'}));
+    arr.push(createElement('animals', {'emoji': '🐍', 'name': 'Snek'}));
+    arr.push(createElement('animals', {'emoji': '🐱', 'name': 'Maru'}));
+  } else {
+    throw new Error(`seed type must be either 'expression' or 'animal'`);
+  }
+};
+
+module.exports = {
+  createElement: createElement,
+  getIndexById: getIndexById,
+  getElementById: getElementById,
+  updateElement: updateElement,
+  seedElements: seedElements,
+};
+```
+
+# Wrap Up
+In this exercise, you were able to create a full server allowing users to implement all CRUD operations for two kinds of resources: Expressions and Animals! With these skills and knowledge of the HTTP request-response cycle, you could implement an API for any project needing CRUD functionality. You could build a trip planner, an address book, a grocery list, an image-sharing application, an anonymous message board, the sky’s the limit!
+
+Continue on to the next lesson to learn more about how to keep your code clean and modular with Express Routers!
