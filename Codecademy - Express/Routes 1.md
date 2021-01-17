@@ -148,7 +148,7 @@ In the example to the right, you can see two .get() routes registered at /anothe
 
 If there are no matching routes registered, or the Express server has not sent a response at the end of all matched routes, it will automatically send back a 404 Not Found response, meaning that no routes were matched or no response was ultimately sent by the registered routes.
 
-![p5] (img/Route1-P5.jpg)
+![p5](img/Route1-P5.jpg)
 
 # Getting A Single Expression
 Routes become much more powerful when they can be used dynamically. Express servers provide this functionality with named route parameters. Parameters are route path segments that begin with : in their Express route definitions. They act as wildcards, matching any text at that path segment. For example /monsters/:id will match both/monsters/1 and /monsters/45.
@@ -345,6 +345,8 @@ Parameters are extremely helpful in making server routes dynamic and able to res
 /monsters/123
 ```
 In order for a request to match a route path, it must match the entire path, as shown in the diagram to the right. The request arrives for /expressions/1. It first tries to match the /expressions route, but because it has additional path segments after /expressions, it does not match this route and moves on to the next. It matches /expressions/:id because :id will match any value at that level of the path segment. The route matches, so the Express server calls the callback function, which in turn handles the request and sends a response.
+
+![p8](img/Routes1-P8.png)
 
 # Other HTTP Methods
 HTTP Protocol defines a number of different method verbs with many use cases. So far, we have been using the GET request which is probably the most common of all. Every time your browser loads an image, it is making a GET request for that file!
@@ -559,4 +561,4 @@ module.exports = {
 # Matching By HTTP Verb
 Express matches routes using both path and HTTP method verb. In the diagram to the right, we see a request with a PUT verb and /expressions (remember that the query is not part of the route path). The path for the first route matches, but the method verb is wrong, so the Express server will continue to the next registered route. This route matches both method and path, and so its callback is called, the necessary updating logic is executed, and the response is sent.
 
-![p11] (img/Route1-P11.jpg)
+![p11](img/Route1-P11.jpg)
