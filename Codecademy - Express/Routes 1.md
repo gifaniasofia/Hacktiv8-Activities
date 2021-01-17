@@ -91,3 +91,472 @@ app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
 ```
+
+# Sending A Response
+HTTP follows a one request-one response cycle. Each client expects exactly one response per request, and each server should only send a single response back to the client per request. The client is like a customer at a restaurant ordering a large bowl of soup: the request is sent through the wait staff, the kitchen prepares the soup, and after is it prepared, the wait staff returns it to the customer. In the restaurant, it would be unfortunate if the soup never arrived back to the customer, but it would be equally problematic if the customer was given four large bowls of soup and was asked to consume them all at the exact same time. That’s impossible with only two hands!
+
+Express servers send responses using the .send() method on the response object. .send() will take any input and include it in the response body.
+```js
+const monsters = [{ type: 'werewolf' }, { type: 'hydra' }, { type: 'chupacabra' }];
+app.get('/monsters', (req, res, next) => {
+  res.send(monsters);
+});
+```
+
+In this example, a GET /monsters request will match the route, Express will call the callback function, and the res.send() method will send back an array of spooky monsters.
+
+In addition to .send(), .json() can be used to explicitly send JSON-formatted responses. .json() sends any JavaScript object passed into it.
+
+**Instructions**
+1. Send the expressions array from your app.get handler. Now that you have a complete route, you can test it out by reloading the browser window and clicking the ‘Refresh Expressions’ button on the machine.
+
+If you make changes to app.js, you will need to restart your server to see the changes in effect. You can do this by pressing Ctrl + C in the terminal window to stop the old server, and you can start it again with node app.js.
+
+**Answer**
+```js
+const express = require('express');
+const app = express();
+const { seedElements } = require('./utils');
+
+// Serves Express Yourself website
+app.use(express.static('public'));
+
+const PORT = process.env.PORT || 4001;
+// Use static server to serve the Express Yourself Website
+app.use(express.static('public'));
+
+const expressions = [];
+seedElements(expressions, 'expressions');
+
+// Get all expressions
+app.get('/expressions', (req, res, next) => {
+  // console.log(req);
+  res.send(expressions)
+});
+
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
+});
+```
+
+# Matching Route Paths
+Express tries to match requests by route, meaning that if we send a request to <server address>:<port number>/api-endpoint, the Express server will search through any registered routes in order and try to match /api-endpoint.
+
+Express searches through routes in the order that they are registered in your code. The first one that is matched will be used, and its callback will be called.
+
+In the example to the right, you can see two .get() routes registered at /another-route and /expressions. When a GET /expressions request arrives to the Express server, it first checks /another-route‘s path because it is registered before the /expressions route. Because /another-route does not match the path, Express moves on to the next registered middleware. Since the route matches the path, the callback is invoked, and it sends a response.
+
+If there are no matching routes registered, or the Express server has not sent a response at the end of all matched routes, it will automatically send back a 404 Not Found response, meaning that no routes were matched or no response was ultimately sent by the registered routes.
+
+![p5] (img/Route1-P5.jpg)
+
+# Getting A Single Expression
+Routes become much more powerful when they can be used dynamically. Express servers provide this functionality with named route parameters. Parameters are route path segments that begin with : in their Express route definitions. They act as wildcards, matching any text at that path segment. For example /monsters/:id will match both/monsters/1 and /monsters/45.
+
+Express parses any parameters, extracts their actual values, and attaches them as an object to the request object: req.params. This object’s keys are any parameter names in the route, and each key’s value is the actual value of that field per request.
+```js
+const monsters = { hydra: { height: 3, age: 4 }, dragon: { height: 200, age: 350 } };
+// GET /monsters/hydra
+app.get('/monsters/:name', (req, res, next) => {
+  console.log(req.params) // { name: 'hydra' };
+  res.send(monsters[req.params.name]);
+});
+```
+In this code snippet, a .get() route is defined to match /monsters/:name path. When a GET request arrives for /monsters/hydra, the callback is called. Inside the callback, req.params is an object with the key name and the value hydra, which was present in the actual request path. The appropriate monster is retrieved by its name from the monsters object and sent back to the client.
+
+**Instructions**
+1. Create a GET /expressions/:id get route that you will use to send back a single expression. You can use req.params object and the pre-written helper function getElementById(id, array) to find the correct expression before sending it back.
+
+For instance, to find ID 560 from expressions, you would call getElementById(560, expressions);. This function returns the element object if it exists and undefined if it does not.
+
+Don’t forget to restart your server when you make changes to app.js. To test the Express Yourself machine, use the box in the upper-left corner to send a GET request for a specified ID.
+
+**Hint**
+The correct ID of the expression can be found using req.params.id.
+
+**Answer**
+```js
+const express = require('express');
+const app = express();
+
+// Serves Express Yourself website
+app.use(express.static('public'));
+
+const { getElementById, seedElements } = require('./utils');
+
+const expressions = [];
+seedElements(expressions, 'expressions');
+
+const PORT = process.env.PORT || 4001;
+// Use static server to serve the Express Yourself Website
+app.use(express.static('public'));
+
+app.get('/expressions', (req, res, next) => {
+  res.send(expressions);
+});
+
+app.get('/expressions/:id', (req, res, next) => {
+  const foundExpression = getElementById(req.params.id, expressions);
+  res.send(foundExpression);
+});
+
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
+});
+```
+
+
+**utils.js**
+```js
+let expressionIdCounter = 0;
+let animalIdCounter = 0;
+
+const getElementById = (id, elementList) => {
+  return elementList.find((element) => {
+    return element.id === Number(id);
+  });
+};
+
+const getIndexById = (id, elementList) => {
+  return elementList.findIndex((element) => {
+    return element.id === Number(id);
+  });
+};
+
+const createElement = (elementType, queryArguments) => {
+  if (queryArguments.hasOwnProperty('emoji') &&
+      queryArguments.hasOwnProperty('name')) {
+    let currentId;
+    if (elementType === 'expressions') {
+      expressionIdCounter += 1;
+      currentId = expressionIdCounter;
+    } else {
+      animalIdCounter += 1;
+      currentId = animalIdCounter;
+    }
+    return {
+      'id':    currentId,
+      'emoji': queryArguments.emoji,
+      'name':  queryArguments.name,
+    };
+  } else {
+    return false;
+  }
+};
+
+const updateElement = (id, queryArguments, elementList) => {
+  const elementIndex = getIndexById(id, elementList);
+  if (elementIndex === -1) {
+    throw new Error('updateElement must be called with a valid id parameter');
+  }
+  if (queryArguments.id) {
+    queryArguments.id = Number(queryArguments.id);
+  }
+  Object.assign(elementList[elementIndex], queryArguments);
+  return elementList[elementIndex];
+};
+
+const seedElements = (arr, type) => {
+  if (type === 'expressions') {
+    arr.push(createElement('expressions', {'emoji': '😀', 'name': 'happy'}));
+    arr.push(createElement('expressions', {'emoji': '😎', 'name': 'shades'}));
+    arr.push(createElement('expressions', {'emoji': '😴', 'name': 'sleepy'}));
+  } else if (type === 'animals') {
+    arr.push(createElement('animals', {'emoji': '🐶', 'name': 'Pupper'}));
+    arr.push(createElement('animals', {'emoji': '🐍', 'name': 'Snek'}));
+    arr.push(createElement('animals', {'emoji': '🐱', 'name': 'Maru'}));
+  } else {
+    throw new Error(`seed type must be either 'expression' or 'animal'`);
+  }
+};
+
+module.exports = {
+  createElement: createElement,
+  getIndexById: getIndexById,
+  getElementById: getElementById,
+  updateElement: updateElement,
+  seedElements: seedElements,
+};
+```
+
+# Setting Status Codes
+Express allows us to set the status code on responses before they are sent. Response codes provide information to clients about how their requests were handled. Until now, we have been allowing the Express server to set status codes for us. For example, any res.send() has by default sent a 200 OK status code.
+
+The res object has a .status() method to allow us to set the status code, and other methods like .send() can be chained from it.
+```js
+const monsterStoreInventory = { fenrirs: 4, banshees: 1, jerseyDevils: 4, krakens: 3 };
+app.get('/monsters-inventory/:name', (req, res, next) => {
+  const monsterInventory = monsterStoreInventory[req.params.name];
+  if (monsterInventory) {
+    res.send(monsterInventory);
+  } else {
+    res.status(404).send('Monster not found');
+  }
+});
+```
+In this example, we’ve implemented a route to retrieve inventory levels from a Monster Store. Inventory levels are kept in the monsterStoreInventory variable. When a request arrives for /monsters-inventory/mothMen, the route matches and so the callback is invoked. req.params.name will be equal to 'mothMen' and so our program accesses monsterStoreInventory['mothMen']. Since there are no mothMen in our inventory,res.status() sets a 404 status code on the response, and .send() sends the response.
+
+**Instructions**
+1. Let’s make sure that our GET /expressions/:id route handles invalid requests properly, for instance if we request an expression ID that does not exist.
+
+Complete your route so that it sends back the correct expression object if it exists and sends back a 404 response if it does not.
+
+**Answer**
+```js
+const express = require('express');
+const app = express();
+
+// Serves Express Yourself website
+app.use(express.static('public'));
+
+const { getElementById, seedElements } = require('./utils');
+
+const expressions = [];
+seedElements(expressions, 'expressions');
+
+const PORT = process.env.PORT || 4001;
+// Use static server to serve the Express Yourself Website
+app.use(express.static('public'));
+
+app.get('/expressions', (req, res, next) => {
+  res.send(expressions);
+});
+
+app.get('/expressions/:id', (req, res, next) => {
+  const foundExpression = getElementById(req.params.id, expressions);
+  if (foundExpression) {
+    res.send(foundExpression);
+  } else {
+    res.status(404).send(`Id is not found`);
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
+});
+```
+
+# Matching Longer Paths
+Parameters are extremely helpful in making server routes dynamic and able to respond to different inputs. Route parameters will match anything in their specific part of the path, so a route matching /monsters/:name would match all the following request paths:
+```
+/monsters/hydra
+/monsters/jörmungandr
+/monsters/manticore
+/monsters/123
+```
+In order for a request to match a route path, it must match the entire path, as shown in the diagram to the right. The request arrives for /expressions/1. It first tries to match the /expressions route, but because it has additional path segments after /expressions, it does not match this route and moves on to the next. It matches /expressions/:id because :id will match any value at that level of the path segment. The route matches, so the Express server calls the callback function, which in turn handles the request and sends a response.
+
+# Other HTTP Methods
+HTTP Protocol defines a number of different method verbs with many use cases. So far, we have been using the GET request which is probably the most common of all. Every time your browser loads an image, it is making a GET request for that file!
+
+This course will cover three other important HTTP methods: PUT, POST, and DELETE. Express provides methods for each one: app.put(), app.post(), and app.delete().
+
+PUT requests are used for updating existing resources. In our Express Yourself machine, a PUT request will be used to update the name or emoji of an expression already saved in our database. For this reason, we will need to include a unique identifier as a route parameter to determine which specific resource to update.
+
+**Instructions**
+1. For now, open a PUT /expressions/:id route with an empty (req, res, next) callback function. We will fully implement its functionality in the next exercise.
+```js
+const express = require('express');
+const app = express();
+
+// Serves Express Yourself website
+app.use(express.static('public'));
+
+const { getElementById, seedElements } = require('./utils');
+
+const expressions = [];
+seedElements(expressions, 'expressions');
+
+const PORT = process.env.PORT || 4001;
+// Use static server to serve the Express Yourself Website
+app.use(express.static('public'));
+
+app.get('/expressions', (req, res, next) => {
+  res.send(expressions);
+});
+
+app.get('/expressions/:id', (req, res, next) => {
+  const foundExpression = getElementById(req.params.id, expressions);
+  if (foundExpression) {
+    res.send(foundExpression);
+  } else {
+    res.status(404).send();
+  }
+});
+
+// Add your PUT route handler below:
+app.put('/expressions/:id', (req, res, next) => {
+  
+})
+
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
+});
+```
+
+# Using Queries
+You may have noticed in the previous exercise that our PUT route had no information about how to update the specified expression, just the id of which expression to update. It turns out that there was more information in the request in the form of a query string. Query strings appear at the end of the path in URLs, and they are indicated with a ? character. For instance, in /monsters/1?name=chimera&age=1, the query string is name=chimera&age=1 and the path is /monsters/1/
+
+Query strings do not count as part of the route path. Instead, the Express server parses them into a JavaScript object and attaches it to the request body as the value of req.query. The key: value relationship is indicated by the = character in a query string, and key-value pairs are separated by &. In the above example route, the req.query object would be { name: 'chimera', age: '1' }.
+```js
+const monsters = { '1': { name: 'cerberus', age: '4'  } };
+// PUT /monsters/1?name=chimera&age=1
+app.put('/monsters/:id', (req, res, next) => {
+  const monsterUpdates = req.query;
+  monsters[req.params.id] = monsterUpdates;
+  res.send(monsters[req.params.id]);
+});
+```
+Here, we have a route for updating monsters by ID. When a PUT /monsters/1?name=chimera&age=1 request arrives, our callback function is called and, we create a monsterUpdates variable to store req.query. Since req.params.id is '1', we replace monsters['1']‘s value with monsterUpdates . Finally, Express sends back the new monsters['1'].
+
+When updating, many servers will send back the updated resource after the updates are applied so that the client has the exact same version of the resource as the server and database.
+
+**Instructions**
+1. Use req.query to update the proper element in the expressions array.
+
+We’ve imported a helper function from /utils.js to help with this task.
+
+You can use the updateElement() helper function in your PUT /expressions/:id route.
+
+It takes three arguments:
+```
+id (the ID number of the element)
+queryArguments (the new, updated expression object from req.query)
+elementList (the array which contains the element to update)
+```
+
+updateElement() updates that specific element in the elementList array (you’ll pass in the expressions array), and then returns the updated element.
+
+Be sure to check that an expression with the id you provide exists in the expressions array (getIndexById() can help)!
+
+To test your functionality with the Express Yourself machine, make sure your server is running, get all expressions, and then use the UPDATE tab to select an individual expression, select updates, and send the PUT request.
+
+**Hint**
+Remember:
+- getIndexById will return -1 if the expressions array doesn’t contain an element with that id.
+- updateElement will throw an error if you pass in an id that doesn’t exist in the array
+
+**Answer**
+```js
+const express = require('express');
+const app = express();
+
+// Serves Express Yourself website
+app.use(express.static('public'));
+
+const { getElementById, getIndexById, updateElement,
+  seedElements, createElement } = require('./utils');
+
+const expressions = [];
+seedElements(expressions, 'expressions');
+
+const PORT = process.env.PORT || 4001;
+// Use static server to serve the Express Yourself Website
+app.use(express.static('public'));
+
+app.get('/expressions', (req, res, next) => {
+  res.send(expressions);
+});
+
+app.get('/expressions/:id', (req, res, next) => {
+  const foundExpression = getElementById(req.params.id, expressions);
+  if (foundExpression) {
+    res.send(foundExpression);
+  } else {
+    res.status(404).send();
+  }
+});
+
+app.put('/expressions/:id', (req, res, next) => {
+  const expressionIndex = getIndexById(req.params.id, expressions);
+  if (expressionIndex !== -1) {
+    updateElement(req.params.id, req.query, expressions);
+    res.send(expressions[expressionIndex]);
+  } else {
+    res.status(404).send();
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
+});
+
+```
+
+**Utils.js**
+```js
+let expressionIdCounter = 0;
+let animalIdCounter = 0;
+
+const getElementById = (id, elementList) => {
+  return elementList.find((element) => {
+    return element.id === Number(id);
+  });
+};
+
+const getIndexById = (id, elementList) => {
+  return elementList.findIndex((element) => {
+    return element.id === Number(id);
+  });
+};
+
+const createElement = (elementType, queryArguments) => {
+  if (queryArguments.hasOwnProperty('emoji') &&
+      queryArguments.hasOwnProperty('name')) {
+    let currentId;
+    if (elementType === 'expressions') {
+      expressionIdCounter += 1;
+      currentId = expressionIdCounter;
+    } else {
+      animalIdCounter += 1;
+      currentId = animalIdCounter;
+    }
+    return {
+      'id':    currentId,
+      'emoji': queryArguments.emoji,
+      'name':  queryArguments.name,
+    };
+  } else {
+    return false;
+  }
+};
+
+const updateElement = (id, queryArguments, elementList) => {
+  const elementIndex = getIndexById(id, elementList);
+  if (elementIndex === -1) {
+    throw new Error('updateElement must be called with a valid id parameter');
+  }
+  if (queryArguments.id) {
+    queryArguments.id = Number(queryArguments.id);
+  }
+  Object.assign(elementList[elementIndex], queryArguments);
+  return elementList[elementIndex];
+};
+
+const seedElements = (arr, type) => {
+  if (type === 'expressions') {
+    arr.push(createElement('expressions', {'emoji': '😀', 'name': 'happy'}));
+    arr.push(createElement('expressions', {'emoji': '😎', 'name': 'shades'}));
+    arr.push(createElement('expressions', {'emoji': '😴', 'name': 'sleepy'}));
+  } else if (type === 'animals') {
+    arr.push(createElement('animals', {'emoji': '🐶', 'name': 'Pupper'}));
+    arr.push(createElement('animals', {'emoji': '🐍', 'name': 'Snek'}));
+    arr.push(createElement('animals', {'emoji': '🐱', 'name': 'Maru'}));
+  } else {
+    throw new Error(`seed type must be either 'expression' or 'animal'`);
+  }
+};
+
+module.exports = {
+  createElement: createElement,
+  getIndexById: getIndexById,
+  getElementById: getElementById,
+  updateElement: updateElement,
+  seedElements: seedElements,
+};
+```
+
+# Matching By HTTP Verb
+Express matches routes using both path and HTTP method verb. In the diagram to the right, we see a request with a PUT verb and /expressions (remember that the query is not part of the route path). The path for the first route matches, but the method verb is wrong, so the Express server will continue to the next registered route. This route matches both method and path, and so its callback is called, the necessary updating logic is executed, and the response is sent.
+
+![p11] (img/Route1-P11.jpg)
