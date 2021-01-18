@@ -22,6 +22,18 @@ app.get('/home', function(req, res) {
 })
 ```
 
+# Tags in EJS
+- `<%` : 'Scriptlet' tag -> for control-flow, no output
+- `<%_` : 'Whitespace Slurping Scriptlet tag', strips all whitespace before it
+- `<%=` : Outputs the value into the template (HTML escaped)
+- `<%-` : Outputs the unescaped value into the template
+- `<%#` : Comment tag, no execution, no output
+- `<%%` : Outputs a literal `<%`
+- `%>` : Plain ending tag
+- `-%>` : Trim-mode ('newline slurp') tag, trims following newline
+- `_%>` : 'Whitespace Slurping' ending tag, removes all whitespace after it
+
+
 # Parsing a data
 Once of many advantages using a template engine is a capability to serving a dynamic data which later can be display in a frontend as a static HTML. The data can be passed by adding object literal as a second parameter in render method.
 ```js
