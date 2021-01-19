@@ -124,9 +124,9 @@ const Controller = require('../controllers/controller.js');
 router.get('/', Controller.getData);
 router.get('/<nama>/add', Controller.getAdd);
 router.post('/<nama>/add', Controller.postAdd);
-router.get('/<nama>/edit/:id', Controller.getEdit);
-router.post('/<nama>/edit/:id', Controller.postEdit);
-router.get('/<nama>/delete/:id', Controller.getDelete);
+router.get('/<nama>/edit/:id', Controller.getEditById);
+router.post('/<nama>/edit/:id', Controller.postEditById);
+router.get('/<nama>/delete/:id', Controller.getDeleteById);
 
 module.exports = router;
 ```
@@ -141,29 +141,60 @@ class Controller {
       if (err) {
         res.send(err.message);
       } else {
-        res.render('table.ejs', { data<Name>: arr<Name> } );
+        res.render('index.ejs', { data<Name>: arr<Name> } );
       }
     })
   }
   
   static getAdd(req, res) {
-  
+    res.render('addForm.ejs');
   }
   
   static postAdd(req, res) {
-  
+    let objNew = req.body;
+    Model.addData(objNew, (err) => {
+      if (err) {
+      	res.send(err);
+      } else {
+      	res.redirect('/');
+      }
+    });
+    
+    // res.redirect('/');
   }
   
-  static getEdit(req, res) {
-  
+  static getEditById(req, res) {
+    let id<Name> = +req.params.id;
+    Model.findById(id<Name>, (err, found<Name>) => {
+      if (err) {
+      	res.send(err);
+      } else {
+      	res.render('editForm.ejs', { edit<Name>: found<Name> });
+      }
+    })
   }
   
-  static postEdit(req, res) {
-  
+  static postEditById(req, res) {
+    let id<Name> = +req.params.id;
+    let objEdit = req.body;
+    Model.editById(id<Name>, objEdit, (err) => {
+      if (err) {
+      	res.send(err);
+      } else {
+      	res.redirect('/');
+      }
+    })
   }
   
-  static getDelete(req, res) {
-  
+  static getDeleteById(req, res) {
+    let id<Name> = +req.params.id;
+    Model.deleteById(id<Name>, (err) => {
+      if (err) {
+      	res.send(err);
+      } else {
+      	res.redirect('/');
+      }
+    })
   }
 }
 
@@ -172,17 +203,27 @@ module.exports = Controller;
 
 # 7. Bikin file ejs di views
 
-table.ejs
+index.ejs ---> table data
+
+- terima data array of instance
+
+https://www.w3schools.com/html/html_tables.asp
+
 ```js
 
 ```
 
 addForm.ejs
+
 ```js
 
 ```
 
 editForm.ejs
+- terima obj
+- `<option selected>APAPUN INI</option>`
+- `<input type="radio" name="gender" value="female" checked>`
+
 ```js
 
 ```
@@ -195,11 +236,33 @@ class Model {
   constructor(obj) {
     this.param1 = obj.param1;
     this.param2 = obj.param2;
+    // ...
   }
-
+  
+  static readData(cb) {
+    // cb -> (err, arr<Name>)
+  }
+  
+  static addData(objNew, cb) {
+    // cb -> (err)
+  }
+  
+  static findById(id<Name>, cb) {
+    // cb -> (err, found<Name>)
+  }
+  
+  static editById(id<Name>, objEdit, cb) {
+    // cb -> (err)
+  }
+  
+  static deleteById(id<Name>, cb) {
+    // cb -> (err)
+  }
 }
 
 module.exports = Model;
 ```
 
-# 9. SEMANGAT!!!!!!!
+# 9. JANGAN LUPA `module.exports`!!!!!!!
+
+# 10. SEMANGAT!!!!!!!!!
