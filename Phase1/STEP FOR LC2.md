@@ -231,7 +231,7 @@ editForm.ejs
 # 8. Bikin file model di models
 
 model.js
-```
+```js
 class Model {
   constructor(obj) {
     this.param1 = obj.param1;
