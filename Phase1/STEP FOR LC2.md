@@ -1,5 +1,5 @@
 # 1. Buat folder dan js yang secara pasti dibutuhkan
-- **Folder** : models, views, controllers, routes
+- **Folder** : models, views, controllers, routes, config
 - **Script** : app.js, config.js, setup.js, seeding.js
 
 # 2. Install yang dibutuhkan
